@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_project_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/project_name"
+            android:inputType="textCapSentences"
+            android:maxLength="50" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e3e3e3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+
+        android:text="@string/note"
+        android:textColor="#000000"
+        android:textSize="19sp" />
+
+    <EditText
+        android:id="@+id/et_project_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="@string/project_hint"
+        android:inputType="textMultiLine"
+        android:maxLength="100" />
+
+</LinearLayout>
