@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
@@ -22,6 +25,7 @@ public class UpgradeFragment extends Fragment {
     View rootView;
     FloatingActionsMenu fam;
     FloatingActionButton fab;
+    ImageView ivBasic, ivGold, ivPlatinum;
 
 
     public UpgradeFragment() {
@@ -40,6 +44,9 @@ public class UpgradeFragment extends Fragment {
         webViewBasic = (WebView) rootView.findViewById(R.id.wv_basic);
         webViewGold = (WebView) rootView.findViewById(R.id.wv_gold);
         webViewPlatinum = (WebView) rootView.findViewById(R.id.wv_platinum);
+        ivPlatinum = (ImageView) rootView.findViewById(R.id.iv_platinum);
+        ivGold = (ImageView) rootView.findViewById(R.id.iv_gold);
+        ivBasic = (ImageView) rootView.findViewById(R.id.iv_basic);
         return rootView;
     }
 
@@ -61,5 +68,18 @@ public class UpgradeFragment extends Fragment {
         webViewGold.loadDataWithBaseURL(null, getString(R.string.details_gold), "text/html", "utf-8", null);
         webViewPlatinum.loadDataWithBaseURL(null, getString(R.string.details_platinum
         ), "text/html", "utf-8", null);
+
+
+        Glide.with(getActivity())
+                .load(R.drawable.background_no_ads)
+                .into(ivBasic);
+
+        Glide.with(getActivity())
+                .load(R.drawable.background_gold)
+                .into(ivGold);
+
+        Glide.with(getActivity())
+                .load(R.drawable.background_platinum)
+                .into(ivPlatinum);
     }
 }
