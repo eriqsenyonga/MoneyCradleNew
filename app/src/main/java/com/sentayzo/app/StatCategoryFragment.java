@@ -138,6 +138,24 @@ public class StatCategoryFragment extends Fragment {
 
             }
 
+        } else if (whichStatCategory == StatPagerAdapter.INCOMEVEXPENSES) {
+            if (periodType == StatisticsActivity.PERIOD_MONTH || periodType == StatisticsActivity.PERIOD_YEAR) {
+
+                if (isSingleEntity) {
+                    cursor = mDb.getIncomeVsExpenseTotals(periodType, specificPeriod, whichOverview, idOfEntity);
+
+                } else {
+
+                    cursor = mDb.getIncomeVsExpenseTotals(periodType, specificPeriod);
+                }
+
+            } else if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
+
+                // TODO: 3/27/2017 what happens for custom period
+                //   cursor = mDb.getIncomeCategoryTotals(fromDate, toDate);
+
+            }
+
         }
 
 

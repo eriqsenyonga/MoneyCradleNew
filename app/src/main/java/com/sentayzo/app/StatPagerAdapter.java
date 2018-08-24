@@ -15,6 +15,7 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
     Context context;
     public static int EXPENSES = 0;
     public static int INCOME = 1;
+    public static int INCOMEVEXPENSES = 2;
 
     Long idOfEntity;
     int whichOverview;
@@ -81,12 +82,29 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
 
             return fragment;
         } else if (position == 2) {
-
+/*
             IncExpenseFragment fragment = new IncExpenseFragment();
 
 
             return fragment;
+*/
 
+
+            IncExpenseFragment fragment = new IncExpenseFragment();
+
+
+            bundle.putInt("which", INCOMEVEXPENSES);
+
+            if(isSingleEntity){
+
+                bundle.putLong("idOfEntity", idOfEntity);
+                bundle.putInt("whichOverview", whichOverview);
+                bundle.putBoolean("isSingleEntity", isSingleEntity);
+            }
+
+            fragment.setArguments(bundle);
+
+            return fragment;
 
         }
 

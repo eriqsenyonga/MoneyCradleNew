@@ -228,9 +228,11 @@ public class StatisticsActivity extends AppCompatActivity implements View.OnClic
 
         StatCategoryFragment page1 = (StatCategoryFragment) getSupportFragmentManager().getFragments().get(0);
         StatCategoryFragment page2 = (StatCategoryFragment) getSupportFragmentManager().getFragments().get(1);
+        IncExpenseFragment page3 = (IncExpenseFragment) getSupportFragmentManager().getFragments().get(2);
 
         page1.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
         page2.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
+        page3.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
 
 
     }

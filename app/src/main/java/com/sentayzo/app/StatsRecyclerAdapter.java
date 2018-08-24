@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,16 +134,47 @@ public class StatsRecyclerAdapter extends CursorRecyclerAdapterWithHeader<Recycl
         public void bindData(final Cursor cursor) {
 
             ArrayList<PieEntry> yEntries = new ArrayList<>();
-            //  ArrayList<String> xEntries = new ArrayList<>();
 
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            if(whichStatCategory == StatPagerAdapter.INCOMEVEXPENSES){
+
+
+                cursor.moveToFirst();
 
                 yEntries.add(
-                        new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totalExpense"))))),
-                                cursor.getString(cursor.getColumnIndex(DbClass.KEY_CATEGORY_NAME))));
+                        new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totExpense"))))),
+                                "Expense"));
+
+                yEntries.add(
+                        new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totIncome"))))),
+                                "Income"));
+
+
+
+
+            }else{
+
+
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+                    yEntries.add(
+                            new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totalExpense"))))),
+                                    cursor.getString(cursor.getColumnIndex(DbClass.KEY_CATEGORY_NAME))));
+
+
+                }
+
 
 
             }
+
+
+
+
+
+            //  ArrayList<String> xEntries = new ArrayList<>();
+
+
 
 
             String stats = null;
@@ -151,10 +183,21 @@ public class StatsRecyclerAdapter extends CursorRecyclerAdapterWithHeader<Recycl
                 stats = context.getResources().getString(R.string.income);
             } else if (whichStatCategory == StatPagerAdapter.EXPENSES) {
                 stats = context.getResources().getString(R.string.expenses);
+            } else if(whichStatCategory == StatPagerAdapter.INCOMEVEXPENSES){
+                stats = context.getResources().getString(R.string.income_vs_expenses);
+
             }
 
             PieDataSet dataSet = new PieDataSet(yEntries, stats);
             dataSet.setSliceSpace(2f);
+
+
+            ArrayList<Integer> colors3 = new ArrayList<>();
+            colors3.add(ContextCompat.getColor(context, R.color.graph_red));
+            colors3.add(ContextCompat.getColor(context, R.color.graph_green));
+
+
+
 
             ArrayList<Integer> colors = new ArrayList<Integer>();
 
@@ -202,6 +245,8 @@ public class StatsRecyclerAdapter extends CursorRecyclerAdapterWithHeader<Recycl
                 dataSet.setColors(colors2);
             } else if (whichStatCategory == StatPagerAdapter.EXPENSES) {
                 dataSet.setColors(colors);
+            } else if (whichStatCategory == StatPagerAdapter.INCOMEVEXPENSES){
+                dataSet.setColors(colors3);
             }
             //       dataSet.setValueLinePart1OffsetPercentage(80.f);
             //       dataSet.setValueLinePart1Length(0.2f);

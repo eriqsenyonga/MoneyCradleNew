@@ -1,21 +1,28 @@
 package com.sentayzo.app;
 
 
+import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -24,8 +31,27 @@ import java.util.ArrayList;
 public class IncExpenseFragment extends Fragment {
 
 
-    LineChart mChart;
+    PieChart pieChart;
+    TextView tvIncome, tvExpense, tvBalance, tvIncomeLabel, tvExpenseLabel, tvBalanceLabel;
     View root;
+
+
+    ConversionClass mCC;
+
+
+    int whichStatCategory; //expense or income
+    int periodType;
+    String fromDate;
+    String toDate;
+    String specificPeriod; //specific period contains date of format MM-yyyy... we extract these in the db
+    DbClass mDb;
+    Cursor cursor;
+    Calendar c;
+    Typeface robotoThin, robotoMedium;
+
+    Long idOfEntity;
+    int whichOverview;
+    boolean isSingleEntity = false;
 
 
     public IncExpenseFragment() {
@@ -38,8 +64,27 @@ public class IncExpenseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        whichStatCategory = this.getArguments().getInt("which", 0);
+        periodType = StatisticsActivity.PERIOD_MONTH;
+
+        if (this.getArguments().getBoolean("isSingleEntity", false)) {
+
+            isSingleEntity = true;
+            idOfEntity = this.getArguments().getLong("idOfEntity");
+            whichOverview = this.getArguments().getInt("whichOverview");
+
+        }
+
+
         root = inflater.inflate(R.layout.fragment_inc_expense, container, false);
-        mChart = (LineChart) root.findViewById(R.id.line_chart);
+        pieChart = (PieChart) root.findViewById(R.id.piechart);
+        tvIncome = (TextView) root.findViewById(R.id.tv_amount_income);
+        tvExpense = (TextView) root.findViewById(R.id.tv_amount_expense);
+        tvBalance = (TextView) root.findViewById(R.id.tv_amount_balance);
+        tvIncomeLabel = (TextView) root.findViewById(R.id.tv_income);
+        tvExpenseLabel = (TextView) root.findViewById(R.id.tv_expense);
+        tvBalanceLabel = (TextView) root.findViewById(R.id.tv_balance);
+
 
         return root;
     }
@@ -48,92 +93,172 @@ public class IncExpenseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mCC = new ConversionClass(getActivity());
+
+        c = Calendar.getInstance();
+
+        // specificPeriod = new String();
+
+        specificPeriod = mCC.dateForStatistics(c.getTime());
+
+        mDb = new DbClass(getActivity());
+
+        robotoThin = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
+        robotoMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Medium.ttf");
+
+        setUpTextViews();
+        setUpPieChart();
 
         setData();
 
+    }
+
+    private void setUpTextViews() {
+
+        if (Build.VERSION.SDK_INT < 23) {
+            //if api below 23
+
+            tvIncomeLabel.setTypeface(robotoMedium);
+            tvIncomeLabel.setTextAppearance(getActivity(), R.style.boldText);
+            tvExpenseLabel.setTypeface(robotoMedium);
+            tvExpenseLabel.setTextAppearance(getActivity(), R.style.boldText);
+            tvBalanceLabel.setTypeface(robotoMedium);
+            tvBalanceLabel.setTextAppearance(getActivity(), R.style.boldText);
+            tvIncome.setTypeface(robotoThin);
+            tvIncome.setTextAppearance(getActivity(), R.style.normalText);
+            tvExpense.setTypeface(robotoThin);
+            tvExpense.setTextAppearance(getActivity(), R.style.normalText);
+            tvBalance.setTypeface(robotoThin);
+            tvBalance.setTextAppearance(getActivity(), R.style.boldText);
+
+        } else {
+            //if api above 23
+            tvIncomeLabel.setTypeface(robotoMedium);
+            tvIncomeLabel.setTextAppearance(R.style.boldText);
+            tvExpenseLabel.setTypeface(robotoMedium);
+            tvExpenseLabel.setTextAppearance(R.style.boldText);
+            tvBalanceLabel.setTypeface(robotoMedium);
+            tvBalanceLabel.setTextAppearance(R.style.boldText);
+            tvIncome.setTypeface(robotoThin);
+            tvIncome.setTextAppearance(R.style.normalText);
+            tvExpense.setTypeface(robotoThin);
+            tvExpense.setTextAppearance(R.style.normalText);
+            tvBalance.setTypeface(robotoThin);
+            tvBalance.setTextAppearance(R.style.boldText);
+
+        }
+    }
+
+    private void setUpPieChart() {
+
+        pieChart.setRotationEnabled(true);
+        pieChart.setHoleRadius(40f);
+        pieChart.setUsePercentValues(true);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setTransparentCircleRadius(45f);
+        pieChart.setTransparentCircleAlpha(110);
+        pieChart.setTransparentCircleColor(Color.WHITE);
 
 
+        pieChart.getDescription().setEnabled(false);
 
     }
 
-    // This is used to store x-axis values
-    private ArrayList<String> setXAxisValues(){
-        ArrayList<String> xVals = new ArrayList<String>();
-        xVals.add("10");
-        xVals.add("20");
-        xVals.add("30");
-        xVals.add("30.5");
-        xVals.add("40");
-
-        return xVals;
-    }
-
-    // This is used to store Y-axis values
-    private ArrayList<Entry> setYAxisValues(){
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-        yVals.add(new Entry(10, 60));
-        yVals.add(new Entry(20, 48));
-        yVals.add(new Entry(30, 70.5f));
-        yVals.add(new Entry(40, 100));
-        yVals.add(new Entry(50, 180.9f));
-
-        return yVals;
-    }
 
     private void setData() {
-        ArrayList<String> xVals = setXAxisValues();
-
-        ArrayList<Entry> yVals = setYAxisValues();
-
-        ArrayList<Entry> zVals = new ArrayList<Entry>();
-        zVals.add(new Entry(10, 20));
-        zVals.add(new Entry(20, 100));
-        zVals.add(new Entry(30, 50));
-        zVals.add(new Entry(40, 48));
-        zVals.add(new Entry(50, 120));
 
 
-        LineDataSet set1, set2;
+        if (periodType == StatisticsActivity.PERIOD_MONTH || periodType == StatisticsActivity.PERIOD_YEAR) {
 
-        // create a dataset and give it a type
-        set1 = new LineDataSet(yVals, "Income");
-       // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
+            if (isSingleEntity) {
+                cursor = mDb.getIncomeVsExpenseTotals(periodType, specificPeriod, whichOverview, idOfEntity);
 
-        // set the line to be drawn like this "- - - - - -"
-        // set1.enableDashedLine(10f, 5f, 0f);
-        // set1.enableDashedHighlightLine(10f, 5f, 0f);
-        set1.setColor(Color.GREEN);
-        set1.setCircleColor(Color.BLACK);
-        set1.setLineWidth(2f);
-        set1.setCircleRadius(3f);
-        set1.setDrawCircleHole(true);
-        set1.setValueTextSize(9f);
-       // set1.setDrawFilled(true);
+            } else {
 
+                cursor = mDb.getIncomeVsExpenseTotals(periodType, specificPeriod);
+            }
 
-        set2 = new LineDataSet(zVals, "Expense");
-        set2.setColor(Color.RED);
-        set2.setCircleColor(Color.BLACK);
-        set2.setLineWidth(2f);
-        set2.setCircleRadius(3f);
-        set2.setDrawCircleHole(true);
-        set2.setValueTextSize(9f);
-      //  set2.setDrawFilled(true);
+        } else if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
+
+            // TODO: 3/27/2017 what happens for custom period
+            //   cursor = mDb.getIncomeCategoryTotals(fromDate, toDate);
+
+        }
 
 
-        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(set1); // add the datasets
-        dataSets.add(set2);
-
-        // create a data object with the datasets
-        LineData data = new LineData(dataSets);
-
-       // new LineData(data);
+        updateChartAndTotals();
 
 
-        // set data
-        mChart.setData(data);
+    }
+
+    private void updateChartAndTotals() {
+
+        cursor.moveToFirst();
+
+        //textviews update
+        tvIncome.setText(mCC.valueConverter(cursor.getLong(cursor.getColumnIndex("totIncome"))));
+        tvExpense.setText(mCC.valueConverter(cursor.getLong(cursor.getColumnIndex("totExpense"))));
+        tvBalance.setText(mCC.valueConverter(cursor.getLong(cursor.getColumnIndex("totBalance"))));
+
+
+        //piechart update
+        ArrayList<PieEntry> yEntries = new ArrayList<>();
+
+        yEntries.add(
+                new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totExpense"))))),
+                        "Expense"));
+
+        yEntries.add(
+                new PieEntry(Math.abs(mCC.valueConverterReturnFloat((cursor.getLong(cursor.getColumnIndex("totIncome"))))),
+                        "Income"));
+
+        PieDataSet dataSet = new PieDataSet(yEntries, getActivity().getResources().getString(R.string.income_vs_expenses));
+        dataSet.setSliceSpace(2f);
+
+
+        ArrayList<Integer> colors3 = new ArrayList<>();
+        colors3.add(ContextCompat.getColor(getActivity(), R.color.graph_red));
+        colors3.add(ContextCompat.getColor(getActivity(), R.color.graph_green));
+
+        dataSet.setColors(colors3);
+
+        PieData pieData = new PieData(dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+        pieChart.setData(pieData);
+        pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        pieChart.highlightValues(null);
+        pieChart.invalidate();
+
+
+    }
+
+
+    public void periodChanged(int periodType, String specificPeriod, String fromDate, String toDate) {
+
+        // Log.d("period_type_sent", "" + periodType);
+        //  Log.d("period_type_current", "" + this.periodType);
+
+
+        this.periodType = periodType;
+
+        if (this.periodType == StatisticsActivity.PERIOD_MONTH) {
+            this.specificPeriod = mCC.dateForStatUseFromDisplay(specificPeriod);
+        }
+
+        if (this.periodType == StatisticsActivity.PERIOD_YEAR) {
+
+            this.specificPeriod = specificPeriod;
+
+        }
+
+
+        if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+        }
+
+        setData();
 
     }
 }

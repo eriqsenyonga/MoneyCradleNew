@@ -101,6 +101,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         }
 
         fab.setOnClickListener(this);
+        fab.setVisibility(View.GONE);
 
 
         c = Calendar.getInstance();
@@ -284,9 +285,11 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         StatCategoryFragment page1 = (StatCategoryFragment) getChildFragmentManager().getFragments().get(0);
         StatCategoryFragment page2 = (StatCategoryFragment) getChildFragmentManager().getFragments().get(1);
+        IncExpenseFragment page3 = (IncExpenseFragment) getChildFragmentManager().getFragments().get(2);
 
         page1.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
         page2.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
+        page3.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
 
 
     }
