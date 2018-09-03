@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +36,7 @@ public class AccountsList extends Fragment {
     FloatingActionButton fabNewTransfer;
     FloatingActionButton fab;
     String tag = "AccountsList Fragment";
-    TextView tv_totalAmount;
+    TextView tv_totalAmount, tv_total_label;
     DbClass mDbClass;
     View rootView;
     String proceed;
@@ -44,6 +45,8 @@ public class AccountsList extends Fragment {
     SharedPreferences billingPrefs;
     Animation animScaleUp, animScaleDown;
     AccountsRecyclerAdapter myAdapter;
+Typeface productSansRegular;
+Typeface productSansBold;
 
     public AccountsList() {
         // Required empty public constructor
@@ -58,6 +61,7 @@ public class AccountsList extends Fragment {
                 false);
 
         tv_totalAmount = (TextView) rootView.findViewById(R.id.tv_totalView);
+        tv_total_label = (TextView) rootView.findViewById(R.id.tv_total_label);
         rvAccounts = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         return rootView;
@@ -69,6 +73,18 @@ public class AccountsList extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mCC = new ConversionClass(getActivity());
+
+        productSansBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Product-Sans-Bold.ttf");
+        productSansRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Product-Sans-Regular.ttf");
+
+        tv_total_label.setTypeface(productSansBold);
+        tv_totalAmount.setTypeface(productSansRegular);
+
+
+
+
+
+
         mDbClass = new DbClass(getActivity());
         proceed = getResources().getString(R.string.proceed);
 

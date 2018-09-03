@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SuccessAcademyFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Here the content of the success academy comes \n
+        The goal is to have 1 or 2 articles sent to the user everyday.\n
+        The point is, the user gets financially better daily with info..
+        \n Look at articles like assets vs liabilities, why u must track your money, how the successful view money, secrets to becoming a multi millionaire" />
+
+</FrameLayout>

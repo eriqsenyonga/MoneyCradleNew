@@ -100,6 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/drawer">
 
@@ -117,16 +118,58 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/b_get_premium"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/accent"
                     android:gravity="center"
-                    android:text="SETTINGS"
+                    android:text="GET PREMIUM"
                     android:textColor="@color/white" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
+
+
+    </android.support.design.widget.NavigationView>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fitsSystemWindows="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Notifications"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black_semi_transparent"
+                android:textStyle="bold"
+
+                />
+
+            <ListView
+                android:id="@+id/lv_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:divider="@null"
+                android:padding="4dp"
+                android:textColor="#FFFFFF"
+
+                />
+
+        </LinearLayout>
 
 
     </android.support.design.widget.NavigationView>

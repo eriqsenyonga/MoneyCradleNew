@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -21,11 +26,12 @@ import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 public class UpgradeFragment extends Fragment {
 
     // TextView detailsNoAds;
-    WebView webViewBasic, webViewGold, webViewPlatinum;
+
     View rootView;
     FloatingActionsMenu fam;
     FloatingActionButton fab;
-    ImageView ivBasic, ivGold, ivPlatinum;
+    ImageView  ivPlatinum;
+    ListView lvPremiumBenefits;
 
 
     public UpgradeFragment() {
@@ -41,12 +47,11 @@ public class UpgradeFragment extends Fragment {
 
         //    detailsNoAds = (TextView) rootView.findViewById(R.id.tv_details_block_ads);
 
-        webViewBasic = (WebView) rootView.findViewById(R.id.wv_basic);
-        webViewGold = (WebView) rootView.findViewById(R.id.wv_gold);
-        webViewPlatinum = (WebView) rootView.findViewById(R.id.wv_platinum);
+
         ivPlatinum = (ImageView) rootView.findViewById(R.id.iv_platinum);
-        ivGold = (ImageView) rootView.findViewById(R.id.iv_gold);
-        ivBasic = (ImageView) rootView.findViewById(R.id.iv_basic);
+
+        lvPremiumBenefits = (ListView) rootView.findViewById(R.id.lv_premium_benefits);
+
         return rootView;
     }
 
@@ -64,22 +69,20 @@ public class UpgradeFragment extends Fragment {
 
         //  detailsNoAds.setText(Html.fromHtml(getString(R.string.block_ads_details)));
 
-        webViewBasic.loadDataWithBaseURL(null, getString(R.string.details_basic), "text/html", "utf-8", null);
-        webViewGold.loadDataWithBaseURL(null, getString(R.string.details_gold), "text/html", "utf-8", null);
-        webViewPlatinum.loadDataWithBaseURL(null, getString(R.string.details_platinum
-        ), "text/html", "utf-8", null);
 
 
-        Glide.with(getActivity())
-                .load(R.drawable.background_no_ads)
-                .into(ivBasic);
 
-        Glide.with(getActivity())
-                .load(R.drawable.background_gold)
-                .into(ivGold);
 
-        Glide.with(getActivity())
-                .load(R.drawable.background_platinum)
-                .into(ivPlatinum);
+        String[] premiumArray = getResources().getStringArray(R.array.premium_benefits);
+        List<String> testList = Arrays.asList(premiumArray);
+
+        // Instanciating Adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.item_row_premium, R.id.tv_row, testList);
+
+        // setting adapter on listview
+        lvPremiumBenefits.setAdapter(adapter);
+
+
     }
 }

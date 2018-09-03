@@ -53,7 +53,7 @@
     </screenName>
     <screenName name="com.sentayzo.app.FinancialStatement">FinancialStatement
     </screenName>
-    <screenName name="com.sentayzo.app.LoginActivity">LoginActivity</screenName>
+    <screenName name="com.sentayzo.app.PinActivity">LoginActivity</screenName>
 
 
     <!-- The following value should be replaced with correct property id. -->

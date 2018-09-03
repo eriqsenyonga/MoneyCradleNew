@@ -20,6 +20,7 @@
             android:maxLines="3"
             android:maxWidth="38dp"
             android:text="08 Jul 2015"
+            android:gravity="center"
 
             />
 

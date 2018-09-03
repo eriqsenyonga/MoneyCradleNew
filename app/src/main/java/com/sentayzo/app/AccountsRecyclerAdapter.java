@@ -50,8 +50,6 @@ public class AccountsRecyclerAdapter extends CursorRecyclerAdapter<AccountsRecyc
         });
 
 
-
-
         singleRowLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -75,6 +73,8 @@ public class AccountsRecyclerAdapter extends CursorRecyclerAdapter<AccountsRecyc
         ConversionClass mCC;
         Typeface robotoMedium;
         Typeface robotoThin;
+        Typeface productSansBold;
+        Typeface productSansRegular;
         Context context;
 
         public ViewHolder(View itemView, Context c) {
@@ -95,9 +95,12 @@ public class AccountsRecyclerAdapter extends CursorRecyclerAdapter<AccountsRecyc
             robotoThin = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
             robotoMedium = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Medium.ttf");
 
+            productSansBold = Typeface.createFromAsset(context.getAssets(), "fonts/Product-Sans-Bold.ttf");
+            productSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Product-Sans-Regular.ttf");
+
             mCC = new ConversionClass(context);
 
-            if (Build.VERSION.SDK_INT < 23) {
+      /*      if (Build.VERSION.SDK_INT < 23) {
                 //if api below 23
 
                 tv_accountTypeName.setTypeface(robotoMedium);
@@ -119,10 +122,37 @@ public class AccountsRecyclerAdapter extends CursorRecyclerAdapter<AccountsRecyc
                 tv_creditLimit.setTypeface(robotoMedium);
                 tv_creditLimit.setTextAppearance(R.style.boldText);
             }
+
+            */
+
+
+            if (Build.VERSION.SDK_INT < 23) {
+                //if api below 23
+
+                tv_accountTypeName.setTypeface(productSansRegular);
+              //  tv_accountTypeName.setTextAppearance(context, R.style.normalText);
+                tv_accountName.setTypeface(productSansBold);
+             //   tv_accountName.setTextAppearance(context, R.style.boldText);
+                tv_accountBalance.setTypeface(productSansRegular);
+             //   tv_accountBalance.setTextAppearance(context, R.style.boldText);
+                tv_creditLimit.setTypeface(productSansBold);
+             //  tv_creditLimit.setTextAppearance(context, R.style.boldText);
+            } else {
+                //if api above 23
+                tv_accountTypeName.setTypeface(productSansRegular);
+              //  tv_accountTypeName.setTextAppearance(R.style.normalText);
+                tv_accountName.setTypeface(productSansBold);
+               // tv_accountName.setTextAppearance(R.style.boldText);
+                tv_accountBalance.setTypeface(productSansRegular);
+             //   tv_accountBalance.setTextAppearance(R.style.boldText);
+                tv_creditLimit.setTypeface(productSansBold);
+               // tv_creditLimit.setTextAppearance(R.style.boldText);
+            }
+
+
         }
 
         public void bindData(final Cursor cursor) {
-
 
 
             String accountTypeName = cursor.getString(cursor
@@ -258,8 +288,6 @@ public class AccountsRecyclerAdapter extends CursorRecyclerAdapter<AccountsRecyc
 
 
         }
-
-
 
 
     }

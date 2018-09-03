@@ -82,14 +82,14 @@ public class StartActivity extends Activity {
 
         if (PIN == true) {
 
-            Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+            Intent intent = new Intent(StartActivity.this, PinActivity.class);
             startActivity(intent);
 
             finish();
 
         } else {
 
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+            Intent intent = new Intent(StartActivity.this, IntroActivity.class);
             intent.putExtra("zero", 0);
             startActivity(intent);
 

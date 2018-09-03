@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sentayzo.app">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -69,7 +70,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sentayzo.app.MainActivity" />
         </activity>
-
         <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help"
@@ -128,7 +128,7 @@
             android:name=".FragTabActivity"
             android:label="@string/title_activity_frag_tab" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".PinActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".StartActivity"
@@ -226,8 +226,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".OverviewActivity" />
         </activity>
-        <activity android:name=".StatisticsActivity"
-            android:label="@string/statistics"></activity>
+        <activity
+            android:name=".StatisticsActivity"
+            android:label="@string/statistics" />
+        <activity
+            android:name=".UpgradeActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sentayzo.app.MainActivity" />
+        </activity>
+        <activity android:name=".IntroActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>

@@ -668,7 +668,7 @@
     <string name="custom">Custom</string>
     <string name="stats">Stats</string>
     <string name="accounts_filter">Accounts filter</string>
-
+    <string name="notifications">Notifications</string>
 
 
     <string-array name="initial_categories">
@@ -743,6 +743,23 @@
         <item>Weekly</item>
         <item>Monthly</item>
         <item>Yearly</item>
+    </string-array>
+
+    <string-array name="premium_benefits">
+        <item>Money Cradle Success Academy</item>
+        <item>Unlimited Accounts</item>
+        <item>Unlock Statistics Analysis</item>
+        <item>Unlimited Projects</item>
+        <item>Unlimited Scheduled transactions</item>
+        <item>Export to CSV, Pdf</item>
+        <item>Block All Ads</item>
+
+    </string-array>
+
+    <string-array name="basic_benefits">
+        <item>Block All Ads</item>
+        <item>2 Accounts Maximum</item>
+        <item>1 Project Maximum</item>
     </string-array>
 
 

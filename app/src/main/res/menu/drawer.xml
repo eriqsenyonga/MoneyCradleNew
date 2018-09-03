@@ -41,47 +41,46 @@
             android:title="@string/closed_accounts" />
 
         <item
-            android:id="@+id/navigation_item_store"
-            android:icon="@drawable/ic_drawer_shopping"
-            android:title="@string/upgrade" />
+            android:id="@+id/navigation_success_academy"
+            android:icon="@drawable/ic_trending_up"
+            android:title="Success Academy" />
 
 
     </group>
-
 
 
     <group android:id="@+id/theRest">
 
+        <item
+            android:id="@+id/navigation_item_settings"
 
-    <item
-
-        android:id="@+id/navigation_item_make_a_suggestion"
-
-        android:title="@string/make_suggestion" />
-    <item
-        android:id="@+id/navigation_item_tell_a_friend"
-
-        android:title="@string/tell_a_friend" />
-    <item
-        android:id="@+id/navigation_item_settings"
-
-        android:title="@string/settings" />
-    <item
-        android:id="@+id/navigation_item_help"
-
-        android:title="@string/help" />
+            android:title="@string/settings" />
 
 
-        <item android:id="@+id/footer_spacer_1"
+        <item
+            android:id="@+id/navigation_item_make_a_suggestion"
+
+            android:title="@string/make_suggestion" />
+        <item
+            android:id="@+id/navigation_item_tell_a_friend"
+
+            android:title="@string/tell_a_friend" />
+
+        <item
+            android:id="@+id/navigation_item_help"
+
+            android:title="@string/help" />
+
+
+        <item
+            android:id="@+id/footer_spacer_1"
             android:checkable="false"
             android:enabled="false"
             android:orderInCategory="200"
-            android:title=""/>
-
+            android:title="" />
 
 
     </group>
-
 
 
 </menu>

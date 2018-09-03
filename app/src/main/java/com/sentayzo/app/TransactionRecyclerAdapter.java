@@ -55,8 +55,8 @@ public class TransactionRecyclerAdapter extends CursorRecyclerAdapter<Transactio
         TextView tvAmount;
         View separatorView;
         ConversionClass mCC;
-        Typeface robotoMedium;
-        Typeface robotoThin;
+        Typeface robotoMedium, productSansBold;
+        Typeface robotoThin, productSansRegular;
 
 
         public TransactionRecyclerHolder(View itemView, Context context) {
@@ -72,11 +72,14 @@ public class TransactionRecyclerAdapter extends CursorRecyclerAdapter<Transactio
             robotoThin = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Thin.ttf");
             robotoMedium = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Medium.ttf");
 
+            productSansBold = Typeface.createFromAsset(context.getAssets(), "fonts/Product-Sans-Bold.ttf");
+            productSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Product-Sans-Regular.ttf");
+
             mCC = new ConversionClass(context);
 
              /* Setting up fonts and appearances of the textViews */
 
-            if (Build.VERSION.SDK_INT < 23) {
+         /*   if (Build.VERSION.SDK_INT < 23) {
                 //if api below 23
                 tvDate.setTypeface(robotoMedium);
                 tvDate.setTextAppearance(context, R.style.boldText);
@@ -101,6 +104,23 @@ public class TransactionRecyclerAdapter extends CursorRecyclerAdapter<Transactio
                 tvAmount.setTypeface(robotoThin);
                 tvAmount.setTextAppearance(R.style.boldText);
             }
+*/
+
+
+
+            tvDate.setTypeface(productSansBold);
+            // tvDate.setTextAppearance(context, R.style.boldText);
+            tvCategory.setTypeface(productSansBold);
+            // tvCategory.setTextAppearance(context, R.style.boldText);
+            tvPayee.setTypeface(productSansRegular);
+            // tvPayee.setTextAppearance(context, R.style.normalText);
+            tvAccount.setTypeface(productSansBold);
+            // tvAccount.setTextAppearance(context, R.style.boldText);
+            tvAmount.setTypeface(productSansRegular);
+            //  tvAmount.setTextAppearance(context, R.style.boldText);
+
+
+
 
 
         }

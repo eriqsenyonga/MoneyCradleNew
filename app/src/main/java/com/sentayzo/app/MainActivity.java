@@ -2,7 +2,6 @@ package com.sentayzo.app;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,8 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +31,9 @@ import com.google.android.gms.ads.InterstitialAd;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     boolean accountsAvailable;
     Toolbar toolBar;
@@ -45,13 +46,17 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPrefs, billingPrefs, mPositionSavedPrefs;
     SharedPreferences.Editor editor, billingEditor, posSavedEditor;
     private InterstitialAd interstitial;
-    NavigationView navigationView;
+    NavigationView navigationView, notificationsNavView;
+    ListView notificationsList;
+    TextView txtViewCount;
     ConversionClass mCC;
     FloatingActionsMenu fam;
     FloatingActionButton fabNewAccount;
     FloatingActionButton fabNewTrn;
     FloatingActionButton fabNewTransfer;
     FloatingActionButton fab;
+    Button bGetPremium;
+    int count = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,15 @@ public class MainActivity extends AppCompatActivity {
         fabNewTrn = (FloatingActionButton) findViewById(R.id.fab_newTransaction);
         fabNewTransfer = (FloatingActionButton) findViewById(R.id.fab_newTransfer);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        bGetPremium = (Button) findViewById(R.id.b_get_premium);
+        notificationsNavView = (NavigationView) findViewById(R.id.navigation_view_notifications);
+        notificationsList = (ListView) notificationsNavView.findViewById(R.id.lv_notifications);
+
+        View emptyNotifications = getLayoutInflater().inflate(R.layout.empty_notifications, null);
+        notificationsList.setEmptyView(emptyNotifications);
+
+
+        bGetPremium.setOnClickListener(this);
 
 
         mPositionSavedPrefs = getSharedPreferences("mPositionSaved",
@@ -94,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int menuItemId = menuItem.getItemId();
                 CharSequence title = menuItem.getTitle();
+
 
                 Fragment fragment = null;
 
@@ -139,13 +154,13 @@ public class MainActivity extends AppCompatActivity {
 
                     fragment = new ClosedAccountsListFragment();
 
-                } else if (menuItemId == R.id.navigation_item_store) {
+                } else if (menuItemId == R.id.navigation_success_academy) {
                     //if store is clicked
 
                     // Intent mi = new Intent( MainActivity.this, Temp_activity.class);
                     //startActivity(mi);
 
-                    fragment = new UpgradeFragment();
+                    fragment = new SuccessAcademyFragment();
 
                 } else if (menuItemId == R.id.navigation_item_make_a_suggestion) {
                     // if "send feedback is clicked"
@@ -332,12 +347,13 @@ public class MainActivity extends AppCompatActivity {
                 title = getString(R.string.closed_accounts);
                 itemIndex = 6;
 
-            } else if (menuItemId == R.id.navigation_item_store) {
+            } else if (menuItemId == R.id.navigation_success_academy) {
                 // if upgrade is clicked
 
-                fragment = new UpgradeFragment();
-                title = getString(R.string.upgrade);
+                fragment = new SuccessAcademyFragment();
+                title = "Success Academy";
                 itemIndex = 7;
+
             }
 
 
@@ -375,6 +391,32 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
+        final View notificationsView = menu.findItem(R.id.action_notifications).getActionView();
+
+        txtViewCount = (TextView) notificationsView.findViewById(R.id.txtCount);
+
+        updateHotCount(count);
+        txtViewCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateHotCount(count++);
+
+            }
+        });
+        notificationsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //    TODO
+                count = 0;
+                updateHotCount(count);
+                drawerLayout.openDrawer(notificationsNavView);
+
+            }
+        });
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -394,6 +436,12 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
+        if (id == R.id.action_notifications) {
+
+            drawerLayout.openDrawer(notificationsNavView);
+
+        }
+
 
         if (id == android.R.id.home) {
 
@@ -531,4 +579,35 @@ public class MainActivity extends AppCompatActivity {
         startActivity(testIntent);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v == bGetPremium) {
+
+            //show a toast that it has been clicked
+
+            //  Toast.makeText(this, "Get Premium", Toast.LENGTH_LONG).show();
+
+            Intent i = new Intent(this, UpgradeActivity.class);
+            startActivity(i);
+
+
+        }
+    }
+
+    public void updateHotCount(final int new_hot_number) {
+        count = new_hot_number;
+        if (count < 0) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (count == 0)
+                    txtViewCount.setVisibility(View.GONE);
+                else {
+                    txtViewCount.setVisibility(View.VISIBLE);
+                    txtViewCount.setText(Integer.toString(count));
+                    // supportInvalidateOptionsMenu();
+                }
+            }
+        });
+    }
 }
