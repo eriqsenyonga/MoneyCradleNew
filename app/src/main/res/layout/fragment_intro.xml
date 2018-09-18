@@ -5,23 +5,23 @@
     android:id="@+id/linlay_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="vertical"
-    tools:context=".IntroFragment"
-
-    >
+    tools:context=".IntroFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_intro_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
         android:gravity="center"
         android:src="@drawable/svg_orrganise"
-        app:civ_border_color="#14000000"
-        app:civ_border_width="1dp" />
+        app:civ_border_color="@color/primary_light"
+        app:civ_border_width="16dp" />
 
 
     <TextView

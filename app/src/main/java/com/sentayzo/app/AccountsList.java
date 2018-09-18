@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
@@ -41,12 +43,13 @@ public class AccountsList extends Fragment {
     View rootView;
     String proceed;
     ConversionClass mCC;
+    LinearLayout emptyState;
 
     SharedPreferences billingPrefs;
     Animation animScaleUp, animScaleDown;
     AccountsRecyclerAdapter myAdapter;
-Typeface productSansRegular;
-Typeface productSansBold;
+    Typeface productSansRegular;
+    Typeface productSansBold;
 
     public AccountsList() {
         // Required empty public constructor
@@ -63,6 +66,7 @@ Typeface productSansBold;
         tv_totalAmount = (TextView) rootView.findViewById(R.id.tv_totalView);
         tv_total_label = (TextView) rootView.findViewById(R.id.tv_total_label);
         rvAccounts = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        emptyState = rootView.findViewById(R.id.empty_accounts);
 
         return rootView;
     }
@@ -79,10 +83,6 @@ Typeface productSansBold;
 
         tv_total_label.setTypeface(productSansBold);
         tv_totalAmount.setTypeface(productSansRegular);
-
-
-
-
 
 
         mDbClass = new DbClass(getActivity());
@@ -104,7 +104,7 @@ Typeface productSansBold;
             fam.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.scale_up));
         }
 
-     //   TapTargetView.showFor(getActivity(), TapTarget.forView(fabNewTrn, "Quick Start", "Begin by creating account by tapping here"));
+        //   TapTargetView.showFor(getActivity(), TapTarget.forView(fabNewTrn, "Quick Start", "Begin by creating account by tapping here"));
 
         billingPrefs = getActivity().getSharedPreferences("my_billing_prefs", 0);
 
@@ -114,15 +114,23 @@ Typeface productSansBold;
 
         // mCursor = mDbClass.getAllOpenAccounts();
 
-
-        myAdapter = new AccountsRecyclerAdapter(getActivity().getContentResolver().query(Uri.parse("content://"
+        Cursor accountsCursor = getActivity().getContentResolver().query(Uri.parse("content://"
                         + "SentayzoDbAuthority" + "/accounts"), null, null, null,
-                null), new CustomItemClickListener() {
+                null);
+
+        if(accountsCursor.getCount() > 0){
+            emptyState.setVisibility(View.GONE);
+        }else{
+            emptyState.setVisibility(View.VISIBLE);
+        }
+
+
+        myAdapter = new AccountsRecyclerAdapter(accountsCursor, new CustomItemClickListener() {
             @Override
             public void onItemClick(View v, int position, final long accountId, boolean isLongClick) {
                 //  txListInteraction.start(id, myAdapter);
 
-                if(isLongClick){
+                if (isLongClick) {
 
                     if (fam.isExpanded()) fam.collapse();
                     final String[] dialogList = getResources().getStringArray(
@@ -139,7 +147,7 @@ Typeface productSansBold;
                                                     int position) {
 
 
-                                    Log.d("in alertdialog", "here");
+                                    //     Log.d("in alertdialog", "here");
 
                                     if (position == 0) {
                                         // if "View Info" is clicked --show dialog
@@ -147,7 +155,7 @@ Typeface productSansBold;
 
                                         AlertDialog.Builder builder3 = new AlertDialog.Builder(
                                                 getActivity());
-                                        builder3.setTitle("Account Details");
+                                        builder3.setTitle(R.string.account_detailss);
 
                                         LayoutInflater inflater = getActivity()
                                                 .getLayoutInflater();
@@ -289,7 +297,6 @@ Typeface productSansBold;
                                         startActivity(i);
 
 
-
                                     }
 
                                     if (position == 3) {
@@ -391,9 +398,20 @@ Typeface productSansBold;
 
                                                                 // myAdapter.swapCursor(mDbClass.getAllOpenAccounts());
 
-                                                                myAdapter.changeCursor(getActivity().getContentResolver().query(Uri.parse("content://"
+                                                                Cursor accountsCursor = getActivity().getContentResolver().query(Uri.parse("content://"
                                                                                 + "SentayzoDbAuthority" + "/accounts"), null, null, null,
-                                                                        null));
+                                                                        null);
+
+                                                                if(accountsCursor.getCount() > 0){
+                                                                    emptyState.setVisibility(View.GONE);
+                                                                }else{
+                                                                    emptyState.setVisibility(View.VISIBLE);
+                                                                }
+
+
+
+
+                                                                myAdapter.changeCursor(accountsCursor);
 
                                                                 myAdapter.notifyDataSetChanged();
                                                             }
@@ -451,9 +469,20 @@ Typeface productSansBold;
                                                         aDbClass.close();
 
                                                         getTotal();
-                                                        myAdapter.changeCursor(getActivity().getContentResolver().query(Uri.parse("content://"
+
+                                                        Cursor accountsCursor = getActivity().getContentResolver().query(Uri.parse("content://"
                                                                         + "SentayzoDbAuthority" + "/accounts"), null, null, null,
-                                                                null));
+                                                                null);
+
+                                                        if(accountsCursor.getCount() > 0){
+                                                            emptyState.setVisibility(View.GONE);
+                                                        }else{
+                                                            emptyState.setVisibility(View.VISIBLE);
+                                                        }
+
+
+
+                                                        myAdapter.changeCursor(accountsCursor);
 
                                                         myAdapter.notifyDataSetChanged();
 
@@ -481,7 +510,8 @@ Typeface productSansBold;
 
                     Dialog d = builder.create();
 
-                    d.show();}else{
+                    d.show();
+                } else {
 
 
                     Intent i = new Intent(getActivity(),
@@ -489,8 +519,6 @@ Typeface productSansBold;
                     i.putExtra("Id", accountId);
                     i.putExtra("whichOverview", OverviewActivity.KEY_ACCOUNT_OVERVIEW);
                     startActivity(i);
-
-
 
 
                 }
@@ -534,10 +562,14 @@ Typeface productSansBold;
             @Override
             public void onClick(View v) {
 
-                Boolean freePeriod = billingPrefs.getBoolean(
-                        "KEY_FREE_TRIAL_PERIOD", true);
+                SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(getActivity());
+
+
+                Boolean freePeriod = skusAndBillingThings.isFreeTrialPeriod();
                 Boolean unlocked = billingPrefs.getBoolean("KEY_PURCHASED_UNLOCK",
                         false);
+
+                Boolean premium = skusAndBillingThings.isPremiumUser();
 
                 if (freePeriod || unlocked) {
 
@@ -617,7 +649,7 @@ Typeface productSansBold;
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(
                             getActivity());
-                    builder.setMessage("You need to have atleast 2 accounts open to use this feature.");
+                    builder.setMessage(R.string.atleast_two_accounts);
 
                     builder.setNeutralButton(getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
@@ -713,7 +745,7 @@ Typeface productSansBold;
                     public void onClick(DialogInterface dialog, int which) {
 
 
-                        Intent i = new Intent(context, StoreActivity.class);
+                        Intent i = new Intent(context, UpgradeActivity.class);
                         startActivity(i);
                     }
                 });

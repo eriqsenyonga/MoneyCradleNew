@@ -12,13 +12,16 @@ import java.io.File;
 
 public class StartActivity extends Activity {
 
-    SharedPreferences sharedPrefs, billingPrefs;
+    SharedPreferences sharedPrefs, billingPrefs, userSharedPrefs;
     Boolean PIN;
     String DATABASE_NAME = "sentayzoDb.db";
+    SkusAndBillingThings skusAndBillingThings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        skusAndBillingThings = new SkusAndBillingThings(StartActivity.this);
 
         billingPrefs = getSharedPreferences("my_billing_prefs",
                 Context.MODE_PRIVATE);
@@ -29,12 +32,14 @@ public class StartActivity extends Activity {
             Log.d("StartActivity", "first_time");
 
             Long timeNow = System.currentTimeMillis();
-            Long fiveDays = (long) (5 * 24 * 60 * 60 * 1000);
-            Long endTime = timeNow + fiveDays;
+            Long sevenDays = (long) (7 * 24 * 60 * 60 * 1000);
+            Long endTime = timeNow + sevenDays;
 
-            editor.putBoolean("KEY_PURCHASED_ADS", false);
+            skusAndBillingThings.setPurchasedAds(false);
             editor.putBoolean("KEY_PURCHASED_UNLOCK", false);
-            editor.putBoolean("KEY_FREE_TRIAL_PERIOD", true);
+            skusAndBillingThings.setPremiumPurchased(false);
+            skusAndBillingThings.setFreeTrialPeriod(true);
+
             editor.putLong("KEY_COUNTER", 0);
 
             editor.putLong("KEY_START_DATE_TIME", timeNow);
@@ -53,20 +58,24 @@ public class StartActivity extends Activity {
                 dbClass.setUpInitials();
 
 
-
-
             }
 
 
             editor.putBoolean("firstTime", false);
 
-            editor.commit();
+            editor.apply();
 
             Intent i = new Intent(this, AlarmService.class);
 
             i.putExtra("endTime", endTime);
 
             startService(i);
+
+            Intent intent = new Intent(StartActivity.this, IntroActivity.class);
+            intent.putExtra("zero", 0);
+            startActivity(intent);
+
+            finish();
 
         }
 
@@ -87,25 +96,37 @@ public class StartActivity extends Activity {
 
             finish();
 
-        } else {
+        }
 
-            Intent intent = new Intent(StartActivity.this, IntroActivity.class);
+        userSharedPrefs = getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
+
+        if (userSharedPrefs.getBoolean("logged_in", false)) {
+
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra("zero", 0);
             startActivity(intent);
 
             finish();
 
-        }
+        } else{
 
+            Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+            intent.putExtra("zero", 0);
+            startActivity(intent);
+
+            finish();
+
+
+        }
 
 
     }
 
 
-
     private static boolean doesDatabaseExist(Context context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
-        Log.d("does database exist", "" + dbFile.exists());
+        //    Log.d("does database exist", "" + dbFile.exists());
         return dbFile.exists();
     }
 }

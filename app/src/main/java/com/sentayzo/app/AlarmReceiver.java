@@ -46,7 +46,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 					false) == false) {
 
 				// first record that the free trial periodType is done
-				editor.putBoolean("KEY_FREE_TRIAL_PERIOD", false).commit();
+				editor.putBoolean("KEY_FREE_TRIAL_PERIOD", false).apply();
 
 				// remove extra accounts
 				new DbClass(context).closeExtraAccountsIfAny();
@@ -54,6 +54,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 				// show notification
 				NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
 						context).setSmallIcon(R.drawable.ic_launcher)
+
 
 				.setContentText(
 						context.getResources().getString(

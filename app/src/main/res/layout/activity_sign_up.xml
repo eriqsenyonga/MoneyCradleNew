@@ -15,88 +15,125 @@
         android:contentDescription="logo"
         android:src="@drawable/ic_logo_vector" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp">
+        android:orientation="vertical">
 
-        <TextView
+
+        <RelativeLayout
+            android:id="@+id/loadingPanel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#ced6cd"
             android:gravity="center"
-            android:padding="4dp"
-            android:text="Sign Up"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:visibility="gone">
 
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_centerInParent="true"
+                />
 
-        <!--  Email Label -->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/et_email"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_below="@id/pb_loading"
+                android:gravity="center"
+                android:text="@string/connecting_to_server"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
-        <!--  Password Label -->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_password"
+
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:passwordToggleEnabled="true">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
 
-            <EditText
-                android:id="@+id/et_password"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword" />
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="@string/sign_up"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
-        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:passwordToggleEnabled="true">
-
-            <EditText
-                android:id="@+id/et_confirm_password"
+            <!--  Email Label -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Confirm Password"
-                android:inputType="textPassword" />
+                android:layout_marginTop="8dp">
 
-        </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--  Password Label -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/et_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_passwordd"
+                    android:inputType="textPassword" />
+
+            </android.support.design.widget.TextInputLayout>
 
 
-        <Button
-            android:id="@+id/b_sign_up"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/accent"
-            android:gravity="center"
-            android:padding="12dp"
-            android:text="Sign Up"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            <Button
+                android:id="@+id/b_sign_up"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/accent"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="@string/sign_up"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>
 

@@ -21,7 +21,15 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
     int whichOverview;
     boolean isSingleEntity = false;
 
+    int numberOfPages = 3;
 
+
+
+    public StatPagerAdapter(FragmentManager fm, Context c, int numberOfPages) {
+        super(fm);
+        context = c;
+        this.numberOfPages = numberOfPages;
+    }
 
 
     public StatPagerAdapter(FragmentManager fm, Context c) {
@@ -106,6 +114,11 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
 
             return fragment;
 
+        } else if(position == 3){
+
+
+            FinancialStatementFragment financialStatementFragment = new FinancialStatementFragment();
+            return financialStatementFragment;
         }
 
 
@@ -114,7 +127,7 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return numberOfPages;
     }
 
     @Override
@@ -131,6 +144,11 @@ public class StatPagerAdapter extends FragmentPagerAdapter {
         }
         if (position == 2) {
             return context.getResources().getString(R.string.income_vs_expenses);
+
+        }
+
+        if (position == 3) {
+            return context.getResources().getString(R.string.title_activity_financial_statement);
 
         }
 

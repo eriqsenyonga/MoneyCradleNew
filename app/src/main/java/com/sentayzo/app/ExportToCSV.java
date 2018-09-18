@@ -20,152 +20,146 @@ import java.util.Date;
 
 public class ExportToCSV extends AsyncTask<String, Void, Boolean> {
 
-	private final ProgressDialog dialog;
-	Context ctx;
-	ConversionClass mCC;
+    private final ProgressDialog dialog;
+    Context ctx;
+    ConversionClass mCC;
 
-	public ExportToCSV(Context context) {
+    public ExportToCSV(Context context) {
 
-		ctx = context;
+        ctx = context;
 
-		dialog = new ProgressDialog(ctx);
+        dialog = new ProgressDialog(ctx);
 
-		mCC = new ConversionClass(ctx);
-	}
+        mCC = new ConversionClass(ctx);
+    }
 
-	// can use UI thread here
+    // can use UI thread here
 
-	@Override
-	protected void onPreExecute()
+    @Override
+    protected void onPreExecute()
 
-	{
+    {
 
-		this.dialog.setMessage("Exporting reports...");
+        this.dialog.setMessage("Exporting reports...");
 
-		this.dialog.show();
+        this.dialog.show();
 
-	}
+    }
 
-	// automatically done on worker thread (separate from UI thread)
+    // automatically done on worker thread (separate from UI thread)
 
-	protected Boolean doInBackground(final String... args)
+    protected Boolean doInBackground(final String... args)
 
-	{
+    {
 
-		// File dbFile = getDatabasePath("excerDB.db");
+        // File dbFile = getDatabasePath("excerDB.db");
 
-		DbClass DBob = new DbClass(ctx);
+        DbClass DBob = new DbClass(ctx);
 
-		File moneyCradleFolder = new File(
-				Environment.getExternalStorageDirectory(), "Money Cradle");
+        File moneyCradleFolder = new File(
+                Environment.getExternalStorageDirectory(), "Money Cradle");
 
-		if (!moneyCradleFolder.exists()) {
+        if (!moneyCradleFolder.exists()) {
 
-			moneyCradleFolder.mkdirs();
-			Log.d("folder created", "folder created");
-		}
+            moneyCradleFolder.mkdirs();
+            Log.d("folder created", "folder created");
+        }
 
-		File csv = new File(moneyCradleFolder,
-				ctx.getString(R.string.spreadsheet_reports));
-		if (!csv.exists()) {
+        File csv = new File(moneyCradleFolder,
+                ctx.getString(R.string.spreadsheet_reports));
+        if (!csv.exists()) {
 
-			csv.mkdirs();
-		}
+            csv.mkdirs();
+        }
 
-		File file = new File(csv, "myTransactions" + new Date().toString()
-				+ ".csv");
+        File file = new File(csv, "myTransactions" + new Date().toString()
+                + ".csv");
 
-		try
+        try
 
-		{
+        {
 
-			file.createNewFile();
+            file.createNewFile();
 
-			CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
-			Cursor curCSV = DBob.getAllTransactionDetails();
+            Cursor curCSV = DBob.getAllTransactionDetails();
 
-			csvWrite.writeNext(curCSV.getColumnNames());
+            csvWrite.writeNext(curCSV.getColumnNames());
 
-			while (curCSV.moveToNext())
+            while (curCSV.moveToNext())
 
-			{
+            {
 
-				String arrStr[] = { mCC.dateForDisplay(curCSV.getString(0)), curCSV.getString(1),
+                String arrStr[] = {mCC.dateForDisplay(curCSV.getString(0)), curCSV.getString(1),
 
-				curCSV.getString(2), curCSV.getString(3),
+                        curCSV.getString(2), curCSV.getString(3),
 
-				mCC.returnAmountForCSVString(curCSV.getLong(4)),
+                        mCC.returnAmountForCSVString(curCSV.getLong(4)),
 
-				curCSV.getString(5), curCSV.getString(6) };
+                        curCSV.getString(5), curCSV.getString(6)};
 
-				csvWrite.writeNext(arrStr);
+                csvWrite.writeNext(arrStr);
 
-			}
+            }
 
-			csvWrite.close();
+            csvWrite.close();
 
-			curCSV.close();
+            curCSV.close();
 
-			return true;
+            return true;
 
-		}
+        } catch (SQLException sqlEx)
 
-		catch (SQLException sqlEx)
+        {
 
-		{
+            Log.e("ExportToCSV", sqlEx.getMessage(), sqlEx);
 
-			Log.e("ExportToCSV", sqlEx.getMessage(), sqlEx);
+            return false;
 
-			return false;
+        } catch (IOException e)
 
-		}
+        {
 
-		catch (IOException e)
+            Log.e("ExportToCSV", e.getMessage(), e);
 
-		{
+            return false;
 
-			Log.e("ExportToCSV", e.getMessage(), e);
+        }
 
-			return false;
+    }
 
-		}
+    // can use UI thread here
 
-	}
+    @Override
+    protected void onPostExecute(final Boolean success)
 
-	// can use UI thread here
+    {
 
-	@Override
-	protected void onPostExecute(final Boolean success)
+        if (this.dialog.isShowing())
 
-	{
+        {
 
-		if (this.dialog.isShowing())
+            this.dialog.dismiss();
 
-		{
+        }
 
-			this.dialog.dismiss();
+        if (success)
 
-		}
+        {
 
-		if (success)
+            Toast.makeText(ctx, ctx.getString(R.string.export_successful),
+                    Toast.LENGTH_LONG).show();
 
-		{
+        } else
 
-			Toast.makeText(ctx, ctx.getString(R.string.export_successful),
-					Toast.LENGTH_LONG).show();
+        {
 
-		}
+            Toast.makeText(ctx, ctx.getString(R.string.export_failed),
+                    Toast.LENGTH_LONG).show();
 
-		else
+        }
 
-		{
-
-			Toast.makeText(ctx, ctx.getString(R.string.export_failed),
-					Toast.LENGTH_LONG).show();
-
-		}
-
-	}
+    }
 
 }

@@ -110,14 +110,14 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         tvCurrentPeriod.setText(mCC.dateForStatDisplayFromCalendarInstance(c.getTime()));
 
 
-        adapter = new StatPagerAdapter(getChildFragmentManager(), getActivity());
+        adapter = new StatPagerAdapter(getChildFragmentManager(), getActivity(), 4);
 
         viewPager.setAdapter(adapter);
 
 
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
 
 
         ibPrev.setOnClickListener(this);

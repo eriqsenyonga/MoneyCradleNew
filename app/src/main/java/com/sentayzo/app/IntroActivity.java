@@ -107,4 +107,6 @@ public class IntroActivity extends AppIntro {
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
     }
+
+
 }

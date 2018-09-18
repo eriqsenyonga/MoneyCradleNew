@@ -216,7 +216,6 @@ public class AlarmService extends IntentService {
 
 			setAlarm(startDateMills, pi, recurId, am);
 
-			Log.d("in AlarmService", "alarm Service end");
 
 		}
 	}

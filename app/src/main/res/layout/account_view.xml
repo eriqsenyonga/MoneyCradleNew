@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#005d87"
     android:orientation="vertical"
     android:padding="10dp" >
 
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="@string/dateCreated"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -28,7 +27,7 @@
             android:layout_below="@id/tv_dateCreated"
             android:text="15 - Jul - 2014"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
 
     <View
@@ -49,7 +48,7 @@
             android:layout_height="wrap_content"
             android:text="@string/accountName"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -59,7 +58,7 @@
             android:layout_below="@id/tv_accountName"
             android:text="Investment Account"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
 
     <View
@@ -80,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="@string/accountType2"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -90,7 +89,7 @@
             android:layout_below="@id/tv_accountType"
             android:text="Asset"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
 
     <View
@@ -111,7 +110,7 @@
             android:layout_height="wrap_content"
             android:text="@string/openningBalance"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -121,7 +120,7 @@
             android:layout_below="@id/tv_accountOpennAmount"
             android:text="340021"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
 
     <View
@@ -142,7 +141,7 @@
             android:layout_height="wrap_content"
             android:text="@string/accountNOte"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -152,7 +151,7 @@
             android:layout_below="@id/tv_accountNnote"
             android:text="Bla bla bla"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
 
     <View
@@ -174,7 +173,7 @@
             android:layout_height="wrap_content"
             android:text="@string/accountbal"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            
             android:textStyle="bold" />
 
         <TextView
@@ -184,7 +183,7 @@
             android:layout_below="@id/tv_accountBal"
             android:text="44000"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+             />
     </RelativeLayout>
     
     <View

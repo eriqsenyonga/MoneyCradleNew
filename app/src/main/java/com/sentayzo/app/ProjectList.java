@@ -45,6 +45,7 @@ public class ProjectList extends ListFragment implements
     Tracker t;
     FloatingActionsMenu fam;
     FloatingActionButton fab;
+    SkusAndBillingThings skusAndBillingThings;
 
     public ProjectList() {
         // required empty constructor
@@ -66,6 +67,7 @@ public class ProjectList extends ListFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        skusAndBillingThings = new SkusAndBillingThings(getActivity());
         t = ((ApplicationClass) getActivity().getApplication()).getTracker(ApplicationClass.TrackerName.APP_TRACKER);
 
         t.setScreenName("ProjectList");
@@ -134,7 +136,9 @@ public class ProjectList extends ListFragment implements
                     } else {
                         //      Log.d("if NOT free trial or unlocked AT ALL",
                         //              "in if NOT free trial or unlocked AT ALL");
-                        showPaymentDialog(getActivity());
+
+
+                        skusAndBillingThings.showPaymentDialog();
 
                     }
 
@@ -496,7 +500,7 @@ public class ProjectList extends ListFragment implements
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
 
-                        Intent i = new Intent(context, StoreActivity.class);
+                        Intent i = new Intent(context, UpgradeActivity.class);
                         startActivity(i);
                     }
                 });

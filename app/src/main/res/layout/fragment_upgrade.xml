@@ -18,55 +18,77 @@
         android:layout_marginTop="8dp"
         android:background="@color/primary_light">
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/primary_light"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@color/primary_light">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
+                android:layout_gravity="bottom"
                 android:background="@color/primary_light"
                 android:gravity="left"
-                android:padding="4dp"
-                android:text="Block Ads"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:text="@string/basic"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/b_remove_ads"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="#000000"
-                android:gravity="right">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_light"
+                android:orientation="horizontal"
+                >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/primary_light"
+                    android:gravity="left"
+                    android:paddingLeft="8dp"
+                    android:text="@string/block_ads"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
+                <android.support.v7.widget.CardView
+                    android:id="@+id/b_remove_ads"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="#000000"
+                    android:gravity="right">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="$1.99"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_price_remove_ads"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="$1.99"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-            </android.support.v7.widget.CardView>
+                    </LinearLayout>
 
+
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -113,7 +135,7 @@
                         android:gravity="left"
                         android:paddingLeft="8dp"
                         android:paddingTop="8dp"
-                        android:text="Premium"
+                        android:text="@string/premium"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -170,7 +192,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Pay Monthly" />
+                            android:text="@string/pay_monthly" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -218,7 +240,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Pay Quarterly"
+                            android:text="@string/pay_quarterly"
 
                             />
 
@@ -240,7 +262,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text=" /month"
+                                android:text="@string/per_month"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
 
@@ -253,7 +275,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="save 10%"
+                            android:text="@string/save_10"
                             android:textStyle="bold"
 
                             />
@@ -287,7 +309,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Pay Yearly"
+                            android:text="@string/pay_yearly"
 
                             />
 
@@ -309,7 +331,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text=" /month"
+                                android:text="@string/per_month"
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
 
@@ -322,7 +344,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="save 20%"
+                            android:text="@string/save_20"
                             android:textStyle="bold"
 
                             />

@@ -68,7 +68,7 @@
     <string name="help_clickTxInt">- Select an option in the dialog </string>
     <string name="help_clickTx">- Click any transaction from the transactions\' list in the HISTORY Tab</string>
     <string name="help_interactTx">Interact with transaction</string>
-    <string name="title_activity_financial_statement">FinancialStatement</string>
+    <string name="title_activity_financial_statement">Financial Statement</string>
     <string name="Title">Personal Financial Statement</string>
     <string name="cashFlow">Cashflow</string>
     <string name="totIncome">Total Income : </string>
@@ -173,7 +173,6 @@
     <string name="proceed">Proceed?</string>
     <string name="closeDialogTitle">Close?</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="closeDialogMessage">Account transactions will remain in \'History\' but the account will be inaccessible</string>
     <string name="drawer_open">Open Navigation Drawer</string>
@@ -551,7 +550,6 @@
 
  ]]>
     </string>
-    <string name="upgrade">Upgrade</string>
     <string name="remove_ads">Remove Ads</string>
     <string name="unlock_features">Unlock all features ( Ads remain)</string>
     <string name="full_unlock">Unlock all features AND remove ads</string>
@@ -563,7 +561,7 @@
     <string name="full_report">Full Report</string>
     <string name="full_version_free_trial_expired">Full Version free trial has expired</string>
     <string name="free_trial_expired">Trial Period Expired</string>
-    <string name="message_expired">Your 5 day Full Version FREE trial period has expired. Some features are now locked and Ads have been introduced.</string>
+    <string name="message_expired">Your 5 day Full Version FREE trial period has expired. Some features are now locked and Ads will show.</string>
     <string name="title_activity_ads_test">AdsTestActivity</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_ad_id">ca-app-pub-8852418671999305/9890924875</string>
@@ -669,10 +667,54 @@
     <string name="stats">Stats</string>
     <string name="accounts_filter">Accounts filter</string>
     <string name="notifications">Notifications</string>
+    <string name="as_at">as at</string>
+    <string name="enter_email">Please enter your email</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="valid_email">Enter valid email</string>
+    <string name="enter_password">Please enter your password</string>
+    <string name="passwords_no_match">Passwords don\'t match</string>
+    <string name="wait">Please wait..</string>
+    <string name="authentication_failed">Authentication failed. Try again.</string>
+    <string name="login">Login</string>
+    <string name="balancee">Balance:</string>
+    <string name="ok">OK</string>
+    <string name="connecting_to_server">Connecting to server</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_passwordd">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">- OR -</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google +</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
+    <string name="atleast_two_accounts">You need to have atleast 2 accounts open to use this feature.</string>
+    <string name="account_detailss">Account Details</string>
+    <string name="web_client_id">172732512307-snmnaihlp7s9ihuv7bkdr1gfvhacqssg.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">632557750200177</string>
+    <string name="fb_login_protocol_scheme">fb632557750200177</string>
+    <string name="login_cancelled">Login cancelled</string>
+    <string name="sign_with_google">Sign In with Google</string>
+    <string name="password_reset">Password Reset</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="email_sent">Email sent. Please check your inbox.</string>
+    <string name="oops">Oops! Something went wrong. Try again.</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="basic">Basic</string>
+    <string name="premium">Premium</string>
+    <string name="block_ads">Block Ads</string>
+    <string name="pay_monthly">Pay Monthly</string>
+    <string name="pay_quarterly">Pay Quarterly</string>
+    <string name="pay_yearly">Pay Yearly</string>
+    <string name="per_month">/month</string>
+    <string name="save_10">save 10%</string>
+    <string name="save_20">save 20%</string>
+    <string name="success_aca">Success Academy</string>
+    <string name="empty_accounts_title">No Accounts Yet</string>
+    <string name="empty_accounts_description">Set up your first account by clicking the + button below. This could be your Wallet, bank account, credit card, loan or asset.</string>
 
 
     <string-array name="initial_categories">
-        <item> Undefined</item>
+        <item>Undefined</item>
         <item>Opening Balance</item>
         <item>Dining</item>
         <item>Utilites</item>

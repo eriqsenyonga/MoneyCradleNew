@@ -37,6 +37,9 @@ public class ConversionClass {
     SimpleDateFormat sdf4Display = new SimpleDateFormat("dd - MMM - yyyy",
             Locale.getDefault());
 
+    SimpleDateFormat sdf4DisplayLong = new SimpleDateFormat("dd MMMM, yyyy",
+            Locale.getDefault());
+
     SimpleDateFormat sdf4DisplayNew = new SimpleDateFormat("dd MMM yyyy",
             Locale.getDefault());
 
@@ -296,6 +299,25 @@ public class ConversionClass {
         try {
 
             formatted = sdf4Display.format(unformatted);
+
+            return formatted;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            //	Log.d("datePicker", e.toString());
+        }
+
+        return formatted;
+    }
+
+    public String dateForDisplayFromCalendarInstanceLong(Date unformatted) {
+
+        String formatted = null;
+
+        try {
+
+            formatted = sdf4DisplayLong.format(unformatted);
 
             return formatted;
 

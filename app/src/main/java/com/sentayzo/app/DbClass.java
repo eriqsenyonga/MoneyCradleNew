@@ -2177,7 +2177,7 @@ public class DbClass {
                 + " INNER JOIN " + DATABASE_TABLE_ACCOUNT + " ON "
                 + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_ACCOUNT_ID
                 + "=" + DATABASE_TABLE_ACCOUNT + "." + KEY_ACCOUNT_ID + " WHERE "
-                + DATABASE_TABLE_ACCOUNT + "." + KEY_ACCOUNT_TYPE + "= 4";
+                + DATABASE_TABLE_ACCOUNT + "." + KEY_ACCOUNT_TYPE + " IN (4,5) ";
 
         // SQL statement to get total amount for cash
         String totCashSql = "SELECT " + DATABASE_TABLE_ACCOUNT + "."
@@ -7466,7 +7466,6 @@ public class DbClass {
 
 
         }
-
 
 
         String sqlIncomeExpenseTotals = "SELECT "

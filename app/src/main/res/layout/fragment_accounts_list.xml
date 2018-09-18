@@ -4,11 +4,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <include layout="@layout/transaction_list"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:layout_above="@+id/linlay"/>
+
+
+        <include layout="@layout/empty_accounts"/>
+
+    </FrameLayout>
 
 
         <LinearLayout

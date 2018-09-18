@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#005d87" >
+   >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/dateCreated"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
             <TextView
@@ -31,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txdateCreated"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -52,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txaccountName"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
             <TextView
@@ -61,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txaccountName"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -82,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/payee2"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
+                
                 android:textStyle="bold" />
 
             <TextView
@@ -91,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txpayeee"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -112,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
+                
                 android:textStyle="bold" />
 
             <TextView
@@ -121,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txcategorys"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -142,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/amount1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
+                
                 android:textStyle="bold" />
 
             <TextView
@@ -151,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txamont"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -172,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/notes"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
+                
                 android:textStyle="bold" />
 
             <TextView
@@ -181,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txnyote"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View
@@ -202,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/project"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
+                
                 android:textStyle="bold" />
 
             <TextView
@@ -211,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_txproj"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                 />
         </RelativeLayout>
 
         <View

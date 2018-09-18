@@ -27,11 +27,14 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.auth.FirebaseAuth;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,11 +60,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton fab;
     Button bGetPremium;
     int count = 1;
+    SharedPreferences userSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        userSharedPrefs = getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
 
         mDbClass = new DbClass(this);
         mCC = new ConversionClass(this);
@@ -210,10 +218,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         View navHeader = navigationView.getHeaderView(0);
         TextView navBal = (TextView) navHeader.findViewById(R.id.tv_balance);
+        TextView navUserEmail = (TextView) navHeader.findViewById(R.id.tv_email);
+        CircleImageView ivUserPic = navHeader.findViewById(R.id.iv_client_profile_pic);
+        TextView navDisplayName = navHeader.findViewById(R.id.tv_display_name);
 
 
-        navBal.setText("Balance: " + mCC.valueConverter(mDbClass.totalTransactionAmount()));
+        navBal.setText(getString(R.string.balancee) + mCC.valueConverter(mDbClass.totalTransactionAmount()));
 
+        if (userSharedPrefs.getBoolean("logged_in", false)) {
+
+            navUserEmail.setText(userSharedPrefs.getString("email", ""));
+            navDisplayName.setText(userSharedPrefs.getString("display_name", ""));
+        }
+
+        ivUserPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                userSharedPrefs.edit().putBoolean("logged_in", false).apply();
+                userSharedPrefs.edit().putString("email", "").apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MainActivity.this, IntroActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         // toolBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -228,7 +258,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         billingPrefs = getSharedPreferences("my_billing_prefs", 0);
 
-        billingEditor.putBoolean("KEY_FREE_TRIAL_PERIOD", true).apply();
+        //TODO remove below line
+
+        billingEditor.putBoolean("KEY_FREE_TRIAL_PERIOD", false).apply();
+
+
         if ((billingPrefs.getBoolean("KEY_FREE_TRIAL_PERIOD", true) == false)
                 && (billingPrefs.getBoolean("KEY_PURCHASED_ADS", false) == false)) {
 
@@ -351,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // if upgrade is clicked
 
                 fragment = new SuccessAcademyFragment();
-                title = "Success Academy";
+                title = getString(R.string.success_aca);
                 itemIndex = 7;
 
             }

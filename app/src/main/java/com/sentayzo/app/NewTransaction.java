@@ -43,11 +43,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.mvc.imagepicker.ImagePicker;
+import com.nguyenhoanglam.imagepicker.model.Config;
+import com.nguyenhoanglam.imagepicker.model.Image;
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -64,7 +68,7 @@ public class NewTransaction extends AppCompatActivity implements
     AutoCompleteTextView et_payee;
     Spinner accountSpinner, categorySpinner, transactionTypeSpinner,
             projectSpinner;
-    LoaderManager mLoaderManager ;
+    LoaderManager mLoaderManager;
     SimpleCursorAdapter accountAdapter, catAdapter, txTypeAdapter,
             payeeAdapter, projectAdapter;
     Long accountId, categoryId, transactionTypeId, projectId, accTypeId;
@@ -515,11 +519,11 @@ public class NewTransaction extends AppCompatActivity implements
         if (accountTypeId == 5) {
             //special scenario if account is a credit card
             /*
-            *       Logic here;
-            *       1. Get the credit limit and current total amount from db
-            *       2. Calculate maximum that can be used in this transaction
-            *       3. if transaction amount > maximum for this transaction, error --> dont save else go ahead
-            * */
+             *       Logic here;
+             *       1. Get the credit limit and current total amount from db
+             *       2. Calculate maximum that can be used in this transaction
+             *       3. if transaction amount > maximum for this transaction, error --> dont save else go ahead
+             * */
 
             tvMaxCreditSpend.setVisibility(View.VISIBLE);
             new MyAsyncGetAllowedAmt().execute(accountId);
@@ -1152,8 +1156,29 @@ public class NewTransaction extends AppCompatActivity implements
         if (view == addPhoto) {
 
 
-            ImagePicker.pickImage(this, "Select your image:");
+           // ImagePicker.pickImage(this, "Select your image:");
 
+            ImagePicker.with(this)                         //  Initialize ImagePicker with activity or fragment context
+                    .setToolbarColor("#212121")         //  Toolbar color
+                    .setStatusBarColor("#000000")       //  StatusBar color (works with SDK >= 21  )
+                    .setToolbarTextColor("#FFFFFF")     //  Toolbar text color (Title and Done button)
+                    .setToolbarIconColor("#FFFFFF")     //  Toolbar icon color (Back and Camera button)
+                    .setProgressBarColor("#4CAF50")     //  ProgressBar color
+                    .setBackgroundColor("#212121")      //  Background color
+                    .setCameraOnly(false)               //  Camera mode
+                    .setMultipleMode(false)              //  Select multiple images or single image
+                    .setFolderMode(true)                //  Folder mode
+                    .setShowCamera(true)                //  Show camera button
+                    .setFolderTitle("Albums")           //  Folder title (works with FolderMode = true)
+                  //  .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
+                    .setDoneTitle("Done")               //  Done button title
+                    .setLimitMessage("You have reached selection limit")    // Selection limit message
+                   // .setMaxSize(10)                     //  Max images can be selected
+                    .setSavePath("Money Cradle")         //  Image capture folder name
+                    .setSelectedImages(new ArrayList<Image>())          //  Selected images
+                    .setAlwaysShowDoneButton(true)      //  Set always show done button in multiple mode
+                    .setKeepScreenOn(true)              //  Keep screen on when selecting images
+                    .start();                           //  Start ImagePicker
 
         }
 
@@ -1186,13 +1211,25 @@ public class NewTransaction extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+/*
 
         Bitmap bitmap = ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
         // TODO do something with the bitmap
 
         saveBitmapToGallery(bitmap);
+        super.onActivityResult(requestCode, resultCode, data);
 
+        */
+
+
+        if (requestCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
+            ArrayList<Image> images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
+            // do your logic here...
+
+            tvPhotoPath.setText(images.get(0).getPath());
+        }
+        super.onActivityResult(requestCode, resultCode, data);  // You MUST have this line to be here
+        // so ImagePicker can work with fragment mode
 
     }
 
