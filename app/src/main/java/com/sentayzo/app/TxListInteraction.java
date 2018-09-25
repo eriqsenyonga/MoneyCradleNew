@@ -288,6 +288,8 @@ public class TxListInteraction {
                         mDbClass.close();
 
 
+
+
                         adapter.changeCursor(getParticularCursor());
 
                         adapter.notifyDataSetChanged();

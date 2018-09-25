@@ -4,40 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <include layout="@layout/transaction_list" />
+
+    <include layout="@layout/empty_state" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_grey"
-        android:orientation="vertical"
-        tools:context="com.sentayzo.app.TransactionListFragment">
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:visibility="gone">
 
-
-        <include layout="@layout/transaction_list"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#000000"
-            android:orientation="horizontal"
-            android:padding="3dp">
+            android:layout_weight="1"
+            android:text="@string/totalAmountView"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/totalAmountView"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@id/tv_totalView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textSize="20sp" />
-        </LinearLayout>
-
+        <TextView
+            android:id="@id/tv_totalView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="20sp" />
     </LinearLayout>
+
 </FrameLayout>

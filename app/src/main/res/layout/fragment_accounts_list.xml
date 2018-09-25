@@ -14,7 +14,7 @@
             android:layout_above="@+id/linlay"/>
 
 
-        <include layout="@layout/empty_accounts"/>
+        <include layout="@layout/empty_state"/>
 
     </FrameLayout>
 

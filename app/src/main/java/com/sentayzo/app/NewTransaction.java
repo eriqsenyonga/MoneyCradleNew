@@ -106,7 +106,7 @@ public class NewTransaction extends AppCompatActivity implements
         setSupportActionBar(toolBar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         i = getIntent();
         tvMaxCreditSpend = (TextView) findViewById(R.id.tv_creditMaxSpend);

@@ -320,40 +320,8 @@ public class ClosedAccountsListFragment extends ListFragment implements
 
     public void showPaymentDialog(final Context context) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setMessage(context.getResources().getString(
-                R.string.payment_dialog_message)
-                + "\n\n"
-                + context.getResources()
-                .getString(R.string.unlock_all_features) + " ?");
-
-        builder.setNegativeButton(
-                context.getResources().getString(R.string.no),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                    }
-                });
-
-        builder.setPositiveButton(context.getResources()
-                        .getString(R.string.yes),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        Intent i = new Intent(context, UpgradeActivity.class);
-                        startActivity(i);
-                    }
-                });
-
-        Dialog paymentDialog = builder.create();
-        paymentDialog.show();
+        SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(context);
+        skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_reopen_accounts));
 
     }
 

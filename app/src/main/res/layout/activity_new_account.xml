@@ -27,8 +27,8 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            card_view:cardCornerRadius="4dp">
+            card_view:cardElevation="4dp"
+            android:layout_marginBottom="4dp">
 
 
             <ScrollView
@@ -66,7 +66,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Account Title"
+                            android:hint="@string/account_title"
                             android:inputType="textCapWords"
                             android:maxLength="25" />
 
@@ -87,7 +87,14 @@
                         android:id="@+id/spinner_accountTypes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#bdbdbd" />
 
                     <TextView
                         android:id="@+id/tv_cardIssuer"
@@ -106,6 +113,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:visibility="gone" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#bdbdbd" />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_creditProvider"
@@ -144,10 +156,7 @@
                     </android.support.design.widget.TextInputLayout>
 
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#e3e3e3" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -193,6 +202,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
+                            android:text="@string/button0"
                             android:hint="@string/openAmount"
                             android:inputType="numberDecimal|numberSigned" />
 

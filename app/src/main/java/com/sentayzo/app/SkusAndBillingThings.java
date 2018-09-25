@@ -6,6 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.CardView;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -132,11 +137,28 @@ public class SkusAndBillingThings {
 
     }
 
-    public void showPaymentDialog() {
+    public void showPaymentDialog(String title) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View v = LayoutInflater.from(context).inflate(R.layout.dialog_upgrade, null);
+        CardView bShowPremiumPlans = v.findViewById(R.id.b_show_plans);
+        CardView bTryFree = v.findViewById(R.id.b_try_for_free);
+        TextView tvTitle = v.findViewById(R.id.tv_upgrade_title);
 
-        builder.setMessage(context.getResources().getString(
+        tvTitle.setText(title);
+
+        builder.setView(v);
+        builder.setCancelable(true);
+        bShowPremiumPlans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i  =  new Intent(context, UpgradeActivity.class);
+                context.startActivity(i);
+            }
+        });
+
+
+       /* builder.setMessage(context.getResources().getString(
                 R.string.payment_dialog_message)
                 + "\n\n"
                 + context.getResources()
@@ -165,7 +187,7 @@ public class SkusAndBillingThings {
                         context.startActivity(i);
                     }
                 });
-
+*/
         Dialog paymentDialog = builder.create();
         paymentDialog.show();
 

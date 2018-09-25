@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             interstitial.loadAd(adRequest);
 
             Long counter = billingPrefs.getLong("KEY_COUNTER", 0);
-            if (counter == 2) {
+            if (counter == 1) {
                 // Prepare an Interstitial Ad Listener
                 interstitial.setAdListener(new AdListener() {
                     public void onAdLoaded() {
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (i.hasExtra("zero")) {
 
-            setTitle("Home");
+            setTitle(getString(R.string.home));
             Fragment fragment = HomeFragment.newInstance();
 
 
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Fragment fragment = null;
             CharSequence title = null;
-            int itemIndex = 0;
+
 
             int menuItemId = mPositionSavedPrefs.getInt(
                     "last_main_position", 1);
@@ -331,8 +331,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragment = HomeFragment.newInstance();
                 title = getString(R.string.home);
 
-                itemIndex = 0;
-
 
             } else if (menuItemId == R.id.navigation_item_statistics) {
 
@@ -340,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 fragment = new StatisticsFragment();
                 title = getString(R.string.statistics);
-                itemIndex = 1;
+
 
             } else if (menuItemId == R.id.navigation_item_categories) {
 
@@ -348,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 fragment = new CategoryList();
                 title = getString(R.string.categories);
-                itemIndex = 3;
+
 
             } else if (menuItemId == R.id.navigation_item_payees) {
 
@@ -356,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 fragment = new PayeeList();
                 title = getString(R.string.payees);
-                itemIndex = 4;
+
 
             } else if (menuItemId == R.id.navigation_item_projects) {
 
@@ -364,14 +362,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 fragment = new ProjectList();
                 title = getString(R.string.projects_drawer);
-                itemIndex = 5;
 
 
             } else if (menuItemId == R.id.navigation_item_scheduled) {
                 // if scheduled transaction is clicked
                 fragment = ScheduledFragment.newInstance();
                 title = getString(R.string.scheduled);
-                itemIndex = 2;
 
 
             } else if (menuItemId == R.id.navigation_item_closed_accounts) {
@@ -379,14 +375,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 fragment = new ClosedAccountsListFragment();
                 title = getString(R.string.closed_accounts);
-                itemIndex = 6;
+
 
             } else if (menuItemId == R.id.navigation_success_academy) {
                 // if upgrade is clicked
 
                 fragment = new SuccessAcademyFragment();
                 title = getString(R.string.success_aca);
-                itemIndex = 7;
+
 
             }
 
@@ -396,7 +392,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // FragmentManager fragmentManager = getFragmentManager();
 
                 setTitle(title);
-                navigationView.getMenu().getItem(itemIndex).setChecked(true);
+
+                navigationView.setCheckedItem(menuItemId);
 
 
                 fm.beginTransaction()

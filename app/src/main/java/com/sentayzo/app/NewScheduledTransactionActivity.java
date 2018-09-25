@@ -33,6 +33,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,13 +49,14 @@ public class NewScheduledTransactionActivity extends AppCompatActivity
 
     Toolbar toolBar;
 
-    Button bStartDate, bEndDate;
+
     ImageButton newCatButton, newProjectButton, calcButton;
     Spinner recurSpinner, accountSpinner, categorySpinner,
             transactionTypeSpinner, projectSpinner;
-    TextView endDateText;
+    TextView endDateText, bStartDate, bEndDate;
     EditText noteEditText, amountEditText;
     AutoCompleteTextView payeeEditText;
+    LinearLayout linlayEndDate;
 
     int doneYes = 1, doneNo = 0;
 
@@ -89,7 +91,7 @@ public class NewScheduledTransactionActivity extends AppCompatActivity
         toolBar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         mLoaderManager = getSupportLoaderManager();
 
@@ -101,8 +103,9 @@ public class NewScheduledTransactionActivity extends AppCompatActivity
         sharedPrefs = getSharedPreferences(sharedPreferenceName,
                 Context.MODE_PRIVATE);
 
-        bStartDate = (Button) findViewById(R.id.spinner_SchStartDate);
-        bEndDate = (Button) findViewById(R.id.spinner_SchEndDate);
+        linlayEndDate = findViewById(R.id.linlay_endDate);
+        bStartDate = findViewById(R.id.spinner_SchStartDate);
+        bEndDate =  findViewById(R.id.spinner_SchEndDate);
         endDateText = (TextView) findViewById(R.id.endText);
         recurSpinner = (Spinner) findViewById(R.id.spinner_recur);
         accountSpinner = (Spinner) findViewById(R.id.spinner_sch_accounts);
@@ -157,10 +160,14 @@ public class NewScheduledTransactionActivity extends AppCompatActivity
                     recurId = arg3;
                     endDateText.setVisibility(View.GONE);
                     bEndDate.setVisibility(View.GONE);
+
+                    linlayEndDate.setVisibility(View.GONE);
                 } else {
                     recurId = arg3;
                     endDateText.setVisibility(View.VISIBLE);
                     bEndDate.setVisibility(View.VISIBLE);
+
+                    linlayEndDate.setVisibility(View.VISIBLE);
 
                 }
 

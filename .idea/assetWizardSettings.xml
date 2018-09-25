@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_notifications_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,11 +34,12 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="1748" />
-                            <entry key="outputName" value="ic_logo_vector" />
+                            <entry key="color" value="1da69d" />
+                            <entry key="height" value="5000" />
+                            <entry key="outputName" value="ic_upgrade" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="E:\Android Studio Projects\MoneyCradle\moneycradle new graphics\money cradle illustrator new logo.svg" />
-                            <entry key="width" value="1240" />
+                            <entry key="sourceFile" value="C:\Users\Eric\Desktop\upgrade.svg" />
+                            <entry key="width" value="5000" />
                           </map>
                         </option>
                       </PersistentState>

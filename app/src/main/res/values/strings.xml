@@ -94,7 +94,7 @@
 
     <string-array name="drawerItems">
         <item>Home</item>
-        <item>Scheduled</item>
+        <item>Planned</item>
         <item>Categories</item>
         <item>Payees</item>
         <item>Projects</item>
@@ -182,10 +182,10 @@
     <string name="action_new_category">New Category</string>
     <string name="title_activity_payee_list">Payees</string>
     <string name="calc_dialog_enter_total_button">Enter Total</string>
-    <string name="title_activity_new_transfer">NewTransfer</string>
+    <string name="title_activity_new_transfer">New Transfer</string>
     <string name="account_from">From</string>
     <string name="account_to">To</string>
-    <string name="new_transfer_activity_title">Transfer Funds</string>
+    <string name="new_transfer_activity_title">Transfer Money</string>
     <string name="include_in_totals">Include account in totals</string>
     <string name="include_in_totals_details">Include transactions from this account in totals</string>
     <string name="project_name">Project Name</string>
@@ -247,7 +247,7 @@
     <string name="currencyAdd">Add Currency</string>
     <string name="amountField">Amount Field</string>
     <string name="accountCantBeSame">Can\'t transfer to same account</string>
-    <string name="createAccountFirst">To get started, create atleast one account first by tapping \'+a\' in the top right of the Home screen</string>
+    <string name="createAccountFirst">To get started, create at least one account first. This could be your Wallet, bank account, credit card, loan or asset.</string>
     <string name="title_activity_frag_tab">FragTabActivity</string>
     <string name="title_activity_login">Enter PIN</string>
     <string name="title_activity_start">StartActivity</string>
@@ -260,7 +260,7 @@
     <string name="no_pending">No pending transactions or transfers</string>
     <string name="no_finished">No completed transactions or transfers</string>
     <string name="title_activity_nav_drawer_test">NavDrawerTestActivity</string>
-    <string name="title_activity_new_scheduled_transaction">New Scheduled Transaction</string>
+    <string name="title_activity_new_scheduled_transaction">New Planned Transaction</string>
     <string name="start_date">Start Date</string>
     <string name="repeat">Repeat</string>
     <string name="end_date">End Date</string>
@@ -276,7 +276,7 @@
     <string name="recur">Recur :</string>
     <string name="notes">Note :</string>
     <string name="projects">Project :</string>
-    <string name="title_activity_edit_scheduled_tx">Edit Scheduled Transaction</string>
+    <string name="title_activity_edit_scheduled_tx">Edit Planned Transaction</string>
     <string name="title_activity_edit_transfer">Edit Transfer</string>
     <string name="edit">Edit</string>
     <string name="no_closed_accounts">No closed accounts </string>
@@ -292,7 +292,7 @@
     <string name="deleteProject">This project will be deleted and all it\'s transactions set to \'No Project\'</string>
     <string name="end">End</string>
     <string name="closeProjectMessage">This project will be inaccessible BUT it\'s transactions will remain in \'History\'</string>
-    <string name="scheduled_transaction">Scheduled Transaction</string>
+    <string name="scheduled_transaction">Planned Transaction</string>
     <string name="pref_general_settings_title">General Settings</string>
     <string name="pref_daily_reminder">Daily Reminder</string>
     <string name="pref_daily_reminder_summary">Remind me to enter the day\'s transactions</string>
@@ -431,7 +431,7 @@
  These can be found in the side menu by tapping the three horizontal bars next to the app icon.
  </p>
  
- <h2>Scheduled</h2>
+ <h2>Planned</h2>
  <p>
  As we carry on with our daily lives there are some things we begin to do as routine.
  This feature is included to help you <b>reduce the work</b> you have to do by entering future transactions.
@@ -439,7 +439,7 @@
  An example of a recurring transaction could be receiving your salary.
  </p>
  
- <p>To add a <b>new Scheduled transaction</b>, tap the <b>+</b> in the top right corner of the screen. This will 
+ <p>To add a <b>new Planned transaction</b>, tap the <b>+</b> in the top right corner of the screen. This will
  open a screen where you can fill in the appropriate details.
  </p>
  
@@ -589,7 +589,7 @@
     <string name="title_activity_budget">Budgets</string>
     <string name="settings">Settings</string>
     <string name="home">Home</string>
-    <string name="scheduled">Scheduled</string>
+    <string name="scheduled">Planned Transactions</string>
     <string name="categories">Categories</string>
     <string name="payees">Payees</string>
     <string name="projects_drawer">Projects</string>
@@ -621,7 +621,7 @@
 
         <li><b>Unlimited Accounts</b></li>
         <li><b>Unlimited Projects</b></li>
-        <li><b>Unlimited Scheduled transactions</b></li>
+        <li><b>Unlimited Planned transactions</b></li>
         <li><b>Unlock Statistics Analysis</b></li>
         <li><b>Unlimited Projects</b></li>
         <p><b>Note:</b> ADs REMAIN</p>
@@ -637,7 +637,7 @@
 
         <li><b>Unlimited Accounts</b></li>
         <li><b>Unlimited Projects</b></li>
-        <li><b>Unlimited Scheduled transactions</b></li>
+        <li><b>Unlimited Planned transactions</b></li>
         <li><b>Unlock Statistics Analysis</b></li>
         <li><b>Unlimited Projects</b></li>
         <li><b>Block All Ads</b></li>
@@ -687,7 +687,7 @@
     <string name="facebook">Facebook</string>
     <string name="google">Google +</string>
     <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
-    <string name="atleast_two_accounts">You need to have atleast 2 accounts open to use this feature.</string>
+    <string name="atleast_two_accounts">Transfer money from one account to another. You need to have at least 2 accounts to use this feature.</string>
     <string name="account_detailss">Account Details</string>
     <string name="web_client_id">172732512307-snmnaihlp7s9ihuv7bkdr1gfvhacqssg.apps.googleusercontent.com</string>
     <string name="facebook_app_id">632557750200177</string>
@@ -710,8 +710,21 @@
     <string name="save_20">save 20%</string>
     <string name="success_aca">Success Academy</string>
     <string name="empty_accounts_title">No Accounts Yet</string>
-    <string name="empty_accounts_description">Set up your first account by clicking the + button below. This could be your Wallet, bank account, credit card, loan or asset.</string>
-
+    <string name="empty_accounts_description">Set up your first account by tapping the + button below. This could be your Wallet, bank account, credit card, loan or asset.</string>
+    <string name="empty_transactions_title">No Transactions Yet</string>
+    <string name="empty_transactions_description">All your transaction history will show up here; income, expenses and transfers. Tap the + below to set up your first transaction.</string>
+    <string name="account_title">Account Name</string>
+    <string name="success_academy">Success Academy</string>
+    <string name="add_new_account">Add new account</string>
+    <string name="get_more_premium">Get more out of Money Cradle. Be in control of your finances with full access to all Premium features.</string>
+    <string name="upgrade_unlimited_accounts">To add unlimited Accounts, upgrade to Premium</string>
+    <string name="upgrade_unlimited_projects">To add unlimited Projects, upgrade to Premium</string>
+    <string name="upgrade_unlimited_planned">To add Planned transactions, upgrade to Premium</string>
+    <string name="upgrade_unlimited_reports">To Export Reports, upgrade to Premium</string>
+    <string name="upgrade_reopen_accounts">To Re-open Accounts, upgrade to Premium</string>
+    <string name="upgrade_success_academy">To fully access Success Academy, upgrade to Premium</string>
+    <string name="show_premium_plans">Show Premium Plans</string>
+    <string name="try_for_free">Try For Free</string>
 
     <string-array name="initial_categories">
         <item>Undefined</item>
@@ -780,7 +793,7 @@
     </string-array>
 
     <string-array name="scheduled_recurrence_types">
-        <item>No Recur</item>
+        <item>One time</item>
         <item>Daily</item>
         <item>Weekly</item>
         <item>Monthly</item>
@@ -792,7 +805,7 @@
         <item>Unlimited Accounts</item>
         <item>Unlock Statistics Analysis</item>
         <item>Unlimited Projects</item>
-        <item>Unlimited Scheduled transactions</item>
+        <item>Unlimited Planned transactions</item>
         <item>Export to CSV, Pdf</item>
         <item>Block All Ads</item>
 

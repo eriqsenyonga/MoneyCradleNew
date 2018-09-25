@@ -301,7 +301,12 @@ public class PendingTxFragment extends Fragment {
     }
 
     private void showPaymentDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(context);
+        skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_planned));
+
+
+    /*    AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setMessage(context.getResources().getString(
                 R.string.payment_dialog_message)
@@ -315,7 +320,7 @@ public class PendingTxFragment extends Fragment {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //
+
 
                     }
                 });
@@ -334,10 +339,8 @@ public class PendingTxFragment extends Fragment {
                 });
 
         Dialog paymentDialog = builder.create();
-        paymentDialog.show();
-
+        paymentDialog.show();*/
 
     }
-
 
 }

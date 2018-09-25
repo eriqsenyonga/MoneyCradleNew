@@ -93,7 +93,7 @@ public class NewTransfer extends AppCompatActivity implements
         setSupportActionBar(toolBar);
         getSupportActionBar().setTitle(R.string.new_transfer_activity_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         dateButton = (Button) findViewById(R.id.spinner_newTransferDates);
         accountFrom = (Spinner) findViewById(R.id.spinner_account_from);

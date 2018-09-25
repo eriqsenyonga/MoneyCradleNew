@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_grey"
     android:orientation="vertical"
-    tools:context="com.sentayzo.app.NewAccount">
+>
 
     <include
         android:id="@+id/app_bar"
@@ -69,7 +69,9 @@
                         android:id="@+id/spinner_account_from"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"/>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -86,9 +88,11 @@
 
                     <Spinner
                         android:id="@+id/spinner_account_to"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -96,7 +100,7 @@
                         android:background="#e3e3e3" />
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"

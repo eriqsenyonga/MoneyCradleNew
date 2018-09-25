@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,10 +45,10 @@ import java.util.Calendar;
 
 public class EditScheduledTx extends AppCompatActivity implements LoaderCallbacks<Cursor>, OnClickListener {
 
-    Button bStartDate, bEndDate, newCatButton, newProjectButton, calcButton;
+    ImageButton newCatButton, newProjectButton, calcButton;
     Spinner recurSpinner, accountSpinner, categorySpinner,
             transactionTypeSpinner, projectSpinner;
-    TextView endDateText;
+    TextView endDateText,bStartDate, bEndDate;
     EditText noteEditText, amountEditText;
     AutoCompleteTextView payeeEditText;
     Long accountTypeId1, accountTypeId2;
@@ -76,6 +78,7 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
     ConversionClass mCC;
     Intent intent;
     Bundle bundle;
+    LinearLayout linlayEndDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,7 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
         toolBar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         mLoaderManager = getSupportLoaderManager();
 
@@ -99,8 +102,8 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
 
         c = Calendar.getInstance();
 
-        bStartDate = (Button) findViewById(R.id.spinner_SchStartDate);
-        bEndDate = (Button) findViewById(R.id.spinner_SchEndDate);
+        bStartDate = findViewById(R.id.spinner_SchStartDate);
+        bEndDate = findViewById(R.id.spinner_SchEndDate);
         endDateText = (TextView) findViewById(R.id.endText);
         recurSpinner = (Spinner) findViewById(R.id.spinner_recur);
         accountSpinner = (Spinner) findViewById(R.id.spinner_sch_accounts);
@@ -110,9 +113,10 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
         payeeEditText = (AutoCompleteTextView) findViewById(R.id.et_sch_payee);
         amountEditText = (EditText) findViewById(R.id.et_sch_amount);
         noteEditText = (EditText) findViewById(R.id.et_sch_note);
-        newProjectButton = (Button) findViewById(R.id.b_sch_new_project);
-        newCatButton = (Button) findViewById(R.id.b_sch_new_cat);
-        calcButton = (Button) findViewById(R.id.b_sch_calculator);
+        newProjectButton =  findViewById(R.id.b_sch_new_project);
+        newCatButton = findViewById(R.id.b_sch_new_cat);
+        calcButton =  findViewById(R.id.b_sch_calculator);
+        linlayEndDate = findViewById(R.id.linlay_endDate);
 
         //set up for ads
 
@@ -193,11 +197,13 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
 
                             endDateText.setVisibility(View.GONE);
                             bEndDate.setVisibility(View.GONE);
+                            linlayEndDate.setVisibility(View.GONE);
                         } else {
 
                             endDateText.setVisibility(View.VISIBLE);
                             bEndDate.setVisibility(View.VISIBLE);
 
+                            linlayEndDate.setVisibility(View.VISIBLE);
                         }
 
 
@@ -218,10 +224,12 @@ public class EditScheduledTx extends AppCompatActivity implements LoaderCallback
                             recurId = arg3;
                             endDateText.setVisibility(View.GONE);
                             bEndDate.setVisibility(View.GONE);
+                            linlayEndDate.setVisibility(View.GONE);
                         } else {
                             recurId = arg3;
                             endDateText.setVisibility(View.VISIBLE);
                             bEndDate.setVisibility(View.VISIBLE);
+                            linlayEndDate.setVisibility(View.VISIBLE);
 
                         }
 

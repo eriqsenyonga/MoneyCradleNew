@@ -5,7 +5,7 @@
         <item
             android:id="@+id/navigation_item_home"
             android:checked="true"
-            android:icon="@drawable/ic_drawer_home"
+            android:icon="@drawable/ic_home"
             android:title="@string/home" />
 
 
@@ -18,32 +18,35 @@
 
         <item
             android:id="@+id/navigation_item_scheduled"
-            android:icon="@drawable/ic_drawer_scheduled"
+            android:icon="@drawable/ic_planned"
             android:title="@string/scheduled" />
-        <item
-            android:id="@+id/navigation_item_categories"
-            android:icon="@drawable/ic_drawer_categories"
-            android:title="@string/categories" />
-
-        <item
-            android:id="@+id/navigation_item_payees"
-            android:icon="@drawable/ic_drawer_payees"
-            android:title="@string/payees" />
-
-        <item
-            android:id="@+id/navigation_item_projects"
-            android:icon="@drawable/ic_drawer_projects"
-            android:title="@string/projects_drawer" />
-
-        <item
-            android:id="@+id/navigation_item_closed_accounts"
-            android:icon="@drawable/ic_drawer_closed_accounts"
-            android:title="@string/closed_accounts" />
 
         <item
             android:id="@+id/navigation_success_academy"
             android:icon="@drawable/ic_trending_up"
-            android:title="Success Academy" />
+            android:title="@string/success_academy" />
+
+        <item
+            android:id="@+id/navigation_item_projects"
+            android:icon="@drawable/ic_folder"
+            android:title="@string/projects_drawer" />
+
+
+        <item
+            android:id="@+id/navigation_item_categories"
+            android:icon="@drawable/ic_category"
+            android:title="@string/categories" />
+
+        <item
+            android:id="@+id/navigation_item_payees"
+            android:icon="@drawable/ic_payeee"
+            android:title="@string/payees" />
+
+
+        <item
+            android:id="@+id/navigation_item_closed_accounts"
+            android:icon="@drawable/ic_lock"
+            android:title="@string/closed_accounts" />
 
 
     </group>

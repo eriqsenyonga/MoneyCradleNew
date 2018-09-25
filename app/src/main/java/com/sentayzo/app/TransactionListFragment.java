@@ -1,5 +1,6 @@
 package com.sentayzo.app;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
@@ -25,13 +28,16 @@ public class TransactionListFragment extends Fragment {
     RecyclerView txList;
     TransactionRecyclerAdapter adapter;
     TxListInteraction txListInteraction;
-    TextView tv_totalAmount;
+    TextView tv_totalAmount, tvEmptyTitle, tvEmptyDescription;
     String tag = "txList";
     DbClass mDbClass;
     ConversionClass mCC;
     FloatingActionsMenu fam;
     FloatingActionButton fab;
     Animation animScaleUp, animScaleDown;
+
+    LinearLayout emptyState;
+    ImageView ivEmptyImage;
 
     public TransactionListFragment() {
         // Required empty public constructor
@@ -46,6 +52,10 @@ public class TransactionListFragment extends Fragment {
                 container, false);
 
         txList = (RecyclerView) view.findViewById(R.id.recycler_view);
+        emptyState = view.findViewById(R.id.linlay_empty_state);
+        ivEmptyImage = view.findViewById(R.id.iv_empty_state);
+        tvEmptyTitle = (TextView) view.findViewById(R.id.tv_empty_title);
+        tvEmptyDescription = (TextView) view.findViewById(R.id.tv_empty_description);
 
         tv_totalAmount = (TextView) view.findViewById(R.id.tv_totalView);
         return view;
@@ -60,6 +70,8 @@ public class TransactionListFragment extends Fragment {
 
         fam = (FloatingActionsMenu) getActivity().findViewById(R.id.fam_fab);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+        setUpEmptyState(R.drawable.ic_transactions,getString( R.string.empty_transactions_title), getString(R.string.empty_transactions_description));
 
 
         fab.setVisibility(View.GONE);
@@ -76,9 +88,21 @@ public class TransactionListFragment extends Fragment {
 
         txListInteraction = new TxListInteraction(getActivity(), TxListInteraction.ALL_TRANSACTIONS);
 
-        adapter = new TransactionRecyclerAdapter(getActivity().getContentResolver().query(Uri.parse("content://"
+
+
+        Cursor transactionCursor = getActivity().getContentResolver().query(Uri.parse("content://"
                         + "SentayzoDbAuthority" + "/transactions"), null, null, null,
-                null), new CustomItemClickListener() {
+                null);
+
+        if(transactionCursor.getCount() > 0){
+            emptyState.setVisibility(View.GONE);
+        }else{
+            emptyState.setVisibility(View.VISIBLE);
+        }
+
+
+
+        adapter = new TransactionRecyclerAdapter(transactionCursor, new CustomItemClickListener() {
             @Override
             public void onItemClick(View v, int position, long id, boolean isLongClick) {
                 txListInteraction.start(id, adapter);
@@ -153,6 +177,15 @@ public class TransactionListFragment extends Fragment {
 
             Log.d(tag, e.toString());
         }
+    }
+
+    private void setUpEmptyState(int emptyImage, String emptyTitle, String emptyDescription) {
+
+        ivEmptyImage.setImageResource(emptyImage);
+        tvEmptyTitle.setText(emptyTitle);
+        tvEmptyDescription.setText(emptyDescription);
+
+
     }
 
 

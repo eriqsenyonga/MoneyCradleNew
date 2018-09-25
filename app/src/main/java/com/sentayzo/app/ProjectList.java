@@ -138,7 +138,7 @@ public class ProjectList extends ListFragment implements
                         //              "in if NOT free trial or unlocked AT ALL");
 
 
-                        skusAndBillingThings.showPaymentDialog();
+                        skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_projects));
 
                     }
 

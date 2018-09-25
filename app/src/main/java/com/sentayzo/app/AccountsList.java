@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,12 +40,13 @@ public class AccountsList extends Fragment {
     FloatingActionButton fabNewTransfer;
     FloatingActionButton fab;
     String tag = "AccountsList Fragment";
-    TextView tv_totalAmount, tv_total_label;
+    TextView tv_totalAmount, tv_total_label, tvEmptyTitle, tvEmptyDescription;
     DbClass mDbClass;
     View rootView;
     String proceed;
     ConversionClass mCC;
     LinearLayout emptyState;
+    ImageView ivEmptyImage;
 
     SharedPreferences billingPrefs;
     Animation animScaleUp, animScaleDown;
@@ -66,7 +69,10 @@ public class AccountsList extends Fragment {
         tv_totalAmount = (TextView) rootView.findViewById(R.id.tv_totalView);
         tv_total_label = (TextView) rootView.findViewById(R.id.tv_total_label);
         rvAccounts = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        emptyState = rootView.findViewById(R.id.empty_accounts);
+        emptyState = rootView.findViewById(R.id.linlay_empty_state);
+        ivEmptyImage = rootView.findViewById(R.id.iv_empty_state);
+        tvEmptyTitle = (TextView) rootView.findViewById(R.id.tv_empty_title);
+        tvEmptyDescription = (TextView) rootView.findViewById(R.id.tv_empty_description);
 
         return rootView;
     }
@@ -108,6 +114,8 @@ public class AccountsList extends Fragment {
 
         billingPrefs = getActivity().getSharedPreferences("my_billing_prefs", 0);
 
+        setUpEmptyState(R.drawable.ic_accounts, getString(R.string.empty_accounts_title), getString(R.string.empty_accounts_description));
+
         animScaleDown = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_down);
         animScaleUp = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_up);
 
@@ -118,9 +126,9 @@ public class AccountsList extends Fragment {
                         + "SentayzoDbAuthority" + "/accounts"), null, null, null,
                 null);
 
-        if(accountsCursor.getCount() > 0){
+        if (accountsCursor.getCount() > 0) {
             emptyState.setVisibility(View.GONE);
-        }else{
+        } else {
             emptyState.setVisibility(View.VISIBLE);
         }
 
@@ -402,13 +410,11 @@ public class AccountsList extends Fragment {
                                                                                 + "SentayzoDbAuthority" + "/accounts"), null, null, null,
                                                                         null);
 
-                                                                if(accountsCursor.getCount() > 0){
+                                                                if (accountsCursor.getCount() > 0) {
                                                                     emptyState.setVisibility(View.GONE);
-                                                                }else{
+                                                                } else {
                                                                     emptyState.setVisibility(View.VISIBLE);
                                                                 }
-
-
 
 
                                                                 myAdapter.changeCursor(accountsCursor);
@@ -474,12 +480,11 @@ public class AccountsList extends Fragment {
                                                                         + "SentayzoDbAuthority" + "/accounts"), null, null, null,
                                                                 null);
 
-                                                        if(accountsCursor.getCount() > 0){
+                                                        if (accountsCursor.getCount() > 0) {
                                                             emptyState.setVisibility(View.GONE);
-                                                        }else{
+                                                        } else {
                                                             emptyState.setVisibility(View.VISIBLE);
                                                         }
-
 
 
                                                         myAdapter.changeCursor(accountsCursor);
@@ -606,13 +611,34 @@ public class AccountsList extends Fragment {
 
                 if (accountsAvailable == false) {
 
+                    View dv = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_alert, null);
+                    CardView button = dv.findViewById(R.id.b_alert_button);
+                    TextView tvTitle = dv.findViewById(R.id.tv_alert_title);
+                    TextView tvMessage = dv.findViewById(R.id.tv_alert_message);
+                    TextView tvButtonText = dv.findViewById(R.id.tv_alert_button);
+
+                    tvTitle.setText(getString(R.string.title_activity_new_transaction));
+                    tvMessage.setText(getString(R.string.createAccountFirst));
+                    tvButtonText.setText(getString(R.string.add_new_account));
+
                     String createAccountFirst = getResources().getString(
                             R.string.createAccountFirst);
 
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(
                             getActivity());
-                    builder.setMessage(createAccountFirst);
+
+                    builder.setView(dv);
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent i = new Intent(getActivity(), NewAccount.class);
+                            startActivity(i);
+
+                        }
+                    });
+               /*     builder.setMessage(createAccountFirst);
                     builder.setNeutralButton(getResources().getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
 
@@ -623,7 +649,7 @@ public class AccountsList extends Fragment {
 
                                 }
                             });
-
+*/
                     Dialog d = builder.create();
                     d.show();
 
@@ -647,7 +673,33 @@ public class AccountsList extends Fragment {
 
                     // String msg = getResources().getString(R.string.accounts_two);
 
+                    View dv = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_alert, null);
+                    CardView button = dv.findViewById(R.id.b_alert_button);
+                    TextView tvTitle = dv.findViewById(R.id.tv_alert_title);
+                    TextView tvMessage = dv.findViewById(R.id.tv_alert_message);
+                    TextView tvButtonText = dv.findViewById(R.id.tv_alert_button);
+
+                    tvTitle.setText(getString(R.string.title_activity_new_transfer));
+                    tvMessage.setText(getString(R.string.atleast_two_accounts));
+                    tvButtonText.setText(getString(R.string.add_new_account));
+
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(
+                            getActivity());
+
+                    builder.setView(dv);
+
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent i = new Intent(getActivity(), NewAccount.class);
+                            startActivity(i);
+
+                        }
+                    });
+
+                   /* AlertDialog.Builder builder = new AlertDialog.Builder(
                             getActivity());
                     builder.setMessage(R.string.atleast_two_accounts);
 
@@ -661,7 +713,7 @@ public class AccountsList extends Fragment {
 
                                 }
                             });
-
+*/
                     Dialog d = builder.create();
                     d.show();
                 } else {
@@ -671,6 +723,15 @@ public class AccountsList extends Fragment {
                 }
             }
         });
+
+
+    }
+
+    private void setUpEmptyState(int emptyImage, String emptyTitle, String emptyDescription) {
+
+        ivEmptyImage.setImageResource(emptyImage);
+        tvEmptyTitle.setText(emptyTitle);
+        tvEmptyDescription.setText(emptyDescription);
 
 
     }
@@ -717,8 +778,11 @@ public class AccountsList extends Fragment {
 
     private void showPaymentDialog(final Context context) {
 
+        SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(context);
+        skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_accounts));
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+    /*    AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setMessage(context.getResources().getString(
                 R.string.payment_dialog_message)
@@ -751,7 +815,7 @@ public class AccountsList extends Fragment {
                 });
 
         Dialog paymentDialog = builder.create();
-        paymentDialog.show();
+        paymentDialog.show();*/
 
     }
 }

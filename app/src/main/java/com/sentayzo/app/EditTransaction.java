@@ -107,7 +107,7 @@ public class EditTransaction extends AppCompatActivity implements
         toolBar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         mLoaderManager = getSupportLoaderManager();
 

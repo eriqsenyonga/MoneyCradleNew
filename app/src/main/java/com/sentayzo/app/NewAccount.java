@@ -99,7 +99,7 @@ public class NewAccount extends AppCompatActivity implements
         t.send(new HitBuilders.ScreenViewBuilder().build());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         mCC = new ConversionClass(NewAccount.this);
 
