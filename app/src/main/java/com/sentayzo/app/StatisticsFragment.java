@@ -2,6 +2,7 @@ package com.sentayzo.app;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -11,19 +12,25 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -33,16 +40,18 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
     // Toolbar toolBar;
     ImageButton ibPrev, ibNext, ibPeriod;
-    TextView tvCurrentPeriod;
+    TextView tvCurrentPeriod, tvFrom, tvTo;
     PopupMenu popupMenu;
     ViewPager viewPager;
     TabLayout tabLayout;
     StatPagerAdapter adapter;
+    LinearLayout linlayYearMonth, linlayCustom, linlayFrom, linlayTo;
 
 
     public static int PERIOD_MONTH = 0;
     public static int PERIOD_YEAR = 1;
     public static int PERIOD_CUSTOM = 2;
+    String fromDate = "", toDate = "";
 
 
     int currentPeriodType;
@@ -74,8 +83,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         ibPeriod = (ImageButton) root.findViewById(R.id.b_period);
         tvCurrentPeriod = (TextView) root.findViewById(R.id.tv_current_period);
         tabLayout = (TabLayout) root.findViewById(R.id.tabLayout);
-        viewPager = (ViewPager) root.findViewById(R.id.view_pager);
 
+        linlayCustom = root.findViewById(R.id.linlay_custom);
+        linlayYearMonth = root.findViewById(R.id.linlay_year_month);
+        linlayFrom = root.findViewById(R.id.linlay_from);
+        linlayTo = root.findViewById(R.id.linlay_to);
+        tvFrom = root.findViewById(R.id.tv_from_date);
+        tvTo = root.findViewById(R.id.tv_to_date);
+
+        viewPager = (ViewPager) root.findViewById(R.id.view_pager);
 
         return root;
     }
@@ -113,17 +129,16 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         adapter = new StatPagerAdapter(getChildFragmentManager(), getActivity(), 4);
 
         viewPager.setAdapter(adapter);
-
-
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setOffscreenPageLimit(3);
-
 
         ibPrev.setOnClickListener(this);
         ibNext.setOnClickListener(this);
         ibPeriod.setOnClickListener(this);
         tvCurrentPeriod.setOnClickListener(this);
+        linlayTo.setOnClickListener(this);
+        linlayFrom.setOnClickListener(this);
 
         setUpPopupMenu();
     }
@@ -148,13 +163,13 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
                     currentPeriodType = PERIOD_MONTH;
                     tvCurrentPeriod.setText(mCC.dateForStatDisplayFromCalendarInstance(c.getTime()));
                     updateFragmentsInViewPager();
-
+                    showCustom(false);
                     return true;
 
                 } else if (itemId == R.id.menu_year) {
 
                     //TODO ADD WHAT HAPPENS ON YEAR
-
+                    showCustom(false);
                     currentPeriodType = PERIOD_YEAR;
                     tvCurrentPeriod.setText(mCC.dateYearForStatDisplayFromCalendarInstance(c.getTime()));
                     updateFragmentsInViewPager();
@@ -163,7 +178,19 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
                 } else if (itemId == R.id.menu_custom) {
 
                     //TODO ADD WHAT HAPPENS ON CUSTOM
-                    Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_LONG).show();
+                    currentPeriodType = PERIOD_CUSTOM;
+                    c.set(Calendar.DAY_OF_MONTH, 1);
+                    tvFrom.setText(mCC.dateForDisplayFromCalendarInstance(c.getTime()));
+                    c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    tvTo.setText(mCC.dateForDisplayFromCalendarInstance(c.getTime()));
+
+                    showCustom(true);
+
+                    fromDate = mCC.dateForDb(tvFrom.getText().toString());
+                    toDate = mCC.dateForDb(tvTo.getText().toString());
+
+                    updateFragmentsInViewPager();
+                    //next is to updateFragments in ViewPager
                     return true;
 
                 }
@@ -176,6 +203,111 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+
+        if(v == linlayFrom){
+
+            try {
+                DatePickerDialog datePicker = new DatePickerDialog(
+                        getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view,
+                                          int selectedYear, int selectedMonth,
+                                          int selectedDay) {
+                        // TODO Auto-generated method stub
+
+                        String dateSetString = selectedYear + "-"
+                                + (selectedMonth + 1) + "-"
+                                + selectedDay;
+
+                        SimpleDateFormat sdf = new SimpleDateFormat(
+                                "yyyy-MM-dd", Locale.getDefault());
+
+                        SimpleDateFormat sdf2 = new SimpleDateFormat(
+                                "dd - MMM - yyyy", Locale.getDefault());
+
+                        try {
+                            tvFrom.setText(sdf2.format(sdf
+                                    .parse(dateSetString)));
+
+                            fromDate = mCC.dateForDb(tvFrom.getText().toString());
+                            toDate = mCC.dateForDb(tvTo.getText().toString());
+                            updateFragmentsInViewPager();
+
+                        } catch (ParseException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                            Log.d("datePicker", e.toString());
+                        }
+
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                        .get(Calendar.DAY_OF_MONTH));
+
+                datePicker.setTitle("Select Date");
+                datePicker.setCancelable(false);
+                datePicker.show();
+            } catch (Exception e) {
+                e.getStackTrace();
+                Log.d("Exception", e.toString());
+            }
+
+
+
+        }
+
+        if(v == linlayTo){
+
+            try {
+                DatePickerDialog datePicker = new DatePickerDialog(
+                        getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view,
+                                          int selectedYear, int selectedMonth,
+                                          int selectedDay) {
+                        // TODO Auto-generated method stub
+
+                        String dateSetString = selectedYear + "-"
+                                + (selectedMonth + 1) + "-"
+                                + selectedDay;
+
+                        SimpleDateFormat sdf = new SimpleDateFormat(
+                                "yyyy-MM-dd", Locale.getDefault());
+
+                        SimpleDateFormat sdf2 = new SimpleDateFormat(
+                                "dd - MMM - yyyy", Locale.getDefault());
+
+                        try {
+                            tvTo.setText(sdf2.format(sdf
+                                    .parse(dateSetString)));
+
+                            fromDate = mCC.dateForDb(tvFrom.getText().toString());
+                            toDate = mCC.dateForDb(tvTo.getText().toString());
+                            updateFragmentsInViewPager();
+
+                        } catch (ParseException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                            Log.d("datePicker", e.toString());
+                        }
+
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                        .get(Calendar.DAY_OF_MONTH));
+
+                datePicker.setTitle("Select Date");
+                datePicker.setCancelable(false);
+                datePicker.show();
+            } catch (Exception e) {
+                e.getStackTrace();
+                Log.d("Exception", e.toString());
+            }
+
+
+
+
+        }
 
 
         if (v == ibPeriod || v == tvCurrentPeriod) {
@@ -259,8 +391,6 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
 
-
-
             }
         });
 
@@ -287,9 +417,29 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         StatCategoryFragment page2 = (StatCategoryFragment) getChildFragmentManager().getFragments().get(1);
         IncExpenseFragment page3 = (IncExpenseFragment) getChildFragmentManager().getFragments().get(2);
 
-        page1.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
-        page2.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
-        page3.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), "", "");
+        page1.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), fromDate, toDate);
+        page2.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), fromDate, toDate);
+        page3.periodChanged(currentPeriodType, tvCurrentPeriod.getText().toString(), fromDate, toDate);
+
+
+    }
+
+
+    public void showCustom(boolean show) {
+
+        if (show) {
+            //if show is true
+
+            linlayYearMonth.setVisibility(View.GONE);
+            linlayCustom.setVisibility(View.VISIBLE);
+
+        } else {
+
+            linlayYearMonth.setVisibility(View.VISIBLE);
+            linlayCustom.setVisibility(View.GONE);
+
+
+        }
 
 
     }

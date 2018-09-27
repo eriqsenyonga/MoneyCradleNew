@@ -7183,6 +7183,97 @@ public class DbClass {
     }
 
 
+    public Cursor getExpenseCategoryTotalsForDateRange(String fromDate, String toDate, int whichOverview, Long idOfEntity) {
+
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
+
+        String whereClauseEntity = null;
+
+
+        if (whichOverview == OverviewActivity.KEY_ACCOUNT_OVERVIEW) {
+
+            whereClauseEntity = KEY_TRANSACTION_ACCOUNT_ID + " = " + idOfEntity;
+        } else if (whichOverview == OverviewActivity.KEY_PROJECT_OVERVIEW) {
+
+            whereClauseEntity = KEY_TRANSACTION_PROJECT_ID + " = " + idOfEntity;
+        }
+
+
+        String sql = "SELECT  " + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID + ", "
+
+
+                + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME + ", " + " SUM( CASE WHEN "
+                + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT
+                + " < 0 THEN " + DATABASE_TABLE_TRANSACTION + "."
+                + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totalExpense"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " INNER JOIN "
+                + DATABASE_TABLE_CATEGORY + " ON " + DATABASE_TABLE_TRANSACTION
+                + "." + KEY_TRANSACTION_CATEGORY_ID + " = "
+                + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID
+                + " WHERE " + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT + " < 0"
+                + " AND "
+                + whereClausePeriod
+                + " AND "
+                + whereClauseEntity
+                + " GROUP BY " + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME
+                + " ORDER BY totalExpense";
+
+        open();
+
+        return ourDatabase.rawQuery(sql, null);
+
+
+    }
+
+
+    public Cursor getExpenseCategoryTotalsForDateRange(String fromDate, String toDate) {
+
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+
+
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
+
+
+        String sql = "SELECT  " + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID + ", "
+
+
+                + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME + ", " + " SUM( CASE WHEN "
+                + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT
+                + " < 0 THEN " + DATABASE_TABLE_TRANSACTION + "."
+                + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totalExpense"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " INNER JOIN "
+                + DATABASE_TABLE_CATEGORY + " ON " + DATABASE_TABLE_TRANSACTION
+                + "." + KEY_TRANSACTION_CATEGORY_ID + " = "
+                + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID
+                + " WHERE " + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT + " < 0"
+                + " AND "
+                + whereClausePeriod
+                + " GROUP BY " + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME
+                + " ORDER BY totalExpense";
+
+        open();
+
+        return ourDatabase.rawQuery(sql, null);
+
+
+    }
+
+
     public Cursor getExpenseCategoryTotals(int periodType, String specificPeriod, int whichOverview, Long idOfEntity) {
 
 
@@ -7379,6 +7470,99 @@ public class DbClass {
 
     }
 
+    public Cursor getIncomeCategoryTotalsForDateRange(String fromDate, String toDate) {
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
+
+
+        String sql = "SELECT  " + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID + ", "
+
+
+                + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME + ", " + " SUM( CASE WHEN "
+                + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT
+                + " > 0 THEN " + DATABASE_TABLE_TRANSACTION + "."
+                + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totalExpense"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " INNER JOIN "
+                + DATABASE_TABLE_CATEGORY + " ON " + DATABASE_TABLE_TRANSACTION
+                + "." + KEY_TRANSACTION_CATEGORY_ID + " = "
+                + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID
+                + " WHERE " + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT + " > 0"
+
+                + " AND "
+                //   WHERE strftime('%m', `date column`) = '04'
+
+                + whereClausePeriod
+
+                + " GROUP BY " + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME
+                + " ORDER BY totalExpense DESC";
+
+        open();
+
+        return ourDatabase.rawQuery(sql, null);
+
+
+    }
+
+    public Cursor getIncomeCategoryTotalsForDateRange(String fromDate, String toDate, int whichOverview, Long idOfEntity) {
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
+
+        String whereClauseEntity = null;
+
+
+        if (whichOverview == OverviewActivity.KEY_ACCOUNT_OVERVIEW) {
+
+            whereClauseEntity = KEY_TRANSACTION_ACCOUNT_ID + " = " + idOfEntity;
+        } else if (whichOverview == OverviewActivity.KEY_PROJECT_OVERVIEW) {
+
+            whereClauseEntity = KEY_TRANSACTION_PROJECT_ID + " = " + idOfEntity;
+        }
+
+
+        String sql = "SELECT  " + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID + ", "
+
+
+                + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME + ", " + " SUM( CASE WHEN "
+                + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT
+                + " > 0 THEN " + DATABASE_TABLE_TRANSACTION + "."
+                + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totalExpense"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " INNER JOIN "
+                + DATABASE_TABLE_CATEGORY + " ON " + DATABASE_TABLE_TRANSACTION
+                + "." + KEY_TRANSACTION_CATEGORY_ID + " = "
+                + DATABASE_TABLE_CATEGORY + "." + KEY_CATEGORY_ID
+                + " WHERE " + DATABASE_TABLE_TRANSACTION + "." + KEY_TRANSACTION_AMOUNT + " > 0"
+
+                + " AND "
+                //   WHERE strftime('%m', `date column`) = '04'
+
+                + whereClausePeriod
+                + " AND "
+                + whereClauseEntity
+
+                + " GROUP BY " + DATABASE_TABLE_CATEGORY + "."
+                + KEY_CATEGORY_NAME
+                + " ORDER BY totalExpense DESC";
+
+        open();
+
+        return ourDatabase.rawQuery(sql, null);
+
+
+    }
+
 
     public Cursor getIncomeVsExpenseTotals(int periodType, String specificPeriod, int whichOverview, Long idOfEntity) {
 
@@ -7436,6 +7620,47 @@ public class DbClass {
 
     }
 
+    public Cursor getIncomeVsExpenseTotalsForDateRange(String fromDate, String toDate, int whichOverview, Long idOfEntity) {
+
+        String entityIdColumn = KEY_TRANSACTION_ACCOUNT_ID;
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+
+        String whereClauseEntity = null;
+
+
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
+
+
+        if (whichOverview == OverviewActivity.KEY_ACCOUNT_OVERVIEW) {
+            entityIdColumn = KEY_TRANSACTION_ACCOUNT_ID;
+            whereClauseEntity = KEY_TRANSACTION_ACCOUNT_ID + " = " + idOfEntity;
+        } else if (whichOverview == OverviewActivity.KEY_PROJECT_OVERVIEW) {
+            entityIdColumn = KEY_TRANSACTION_PROJECT_ID;
+            whereClauseEntity = KEY_TRANSACTION_PROJECT_ID + " = " + idOfEntity;
+        }
+
+
+        String sqlIncomeExpenseTotals = "SELECT " + entityIdColumn
+                + ", SUM( CASE WHEN " + KEY_TRANSACTION_AMOUNT + " > 0 THEN " + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totIncome "
+                + ", SUM( CASE WHEN " + KEY_TRANSACTION_AMOUNT + " < 0 THEN " + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totExpense "
+                + ", SUM( " + KEY_TRANSACTION_AMOUNT + ") AS totBalance"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " WHERE "
+                + whereClausePeriod
+                + " AND "
+                + whereClauseEntity;
+
+
+        open();
+
+        return ourDatabase.rawQuery(sqlIncomeExpenseTotals, null);
+
+    }
+
     public Cursor getIncomeVsExpenseTotals(int periodType, String specificPeriod) {
 
         //  String entityIdColumn = KEY_TRANSACTION_ACCOUNT_ID;
@@ -7466,6 +7691,33 @@ public class DbClass {
 
 
         }
+
+
+        String sqlIncomeExpenseTotals = "SELECT "
+                + " SUM( CASE WHEN " + KEY_TRANSACTION_AMOUNT + " > 0 THEN " + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totIncome "
+                + ", SUM( CASE WHEN " + KEY_TRANSACTION_AMOUNT + " < 0 THEN " + KEY_TRANSACTION_AMOUNT + " ELSE 0 END) AS totExpense "
+                + ", SUM( " + KEY_TRANSACTION_AMOUNT + ") AS totBalance"
+                + " FROM "
+                + DATABASE_TABLE_TRANSACTION + " WHERE "
+                + whereClausePeriod;
+
+
+        open();
+
+        return ourDatabase.rawQuery(sqlIncomeExpenseTotals, null);
+
+    }
+
+    public Cursor getIncomeVsExpenseTotalsForDateRange(String fromDate, String toDate) {
+
+        //  String entityIdColumn = KEY_TRANSACTION_ACCOUNT_ID;
+
+
+        ConversionClass mCC = new ConversionClass(ourContext);
+
+        String month;
+        String year;
+        String whereClausePeriod = "(" + KEY_TRANSACTION_DATE + " BETWEEN DATE ('" + fromDate + "') AND DATE('" + toDate + "'))";
 
 
         String sqlIncomeExpenseTotals = "SELECT "

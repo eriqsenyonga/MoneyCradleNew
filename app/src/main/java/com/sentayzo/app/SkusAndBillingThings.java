@@ -152,8 +152,19 @@ public class SkusAndBillingThings {
         bShowPremiumPlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  =  new Intent(context, UpgradeActivity.class);
+                Intent i = new Intent(context, UpgradeActivity.class);
                 context.startActivity(i);
+            }
+        });
+
+        bTryFree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(context, UpgradeActivity.class);
+                i.putExtra("try_free", true);
+                context.startActivity(i);
+
             }
         });
 
@@ -192,8 +203,6 @@ public class SkusAndBillingThings {
         paymentDialog.show();
 
     }
-
-
 
 
 }

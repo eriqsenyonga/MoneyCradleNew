@@ -48,7 +48,7 @@ public class UpgradeFragment extends Fragment {
         //    detailsNoAds = (TextView) rootView.findViewById(R.id.tv_details_block_ads);
 
 
-        ivPlatinum = (ImageView) rootView.findViewById(R.id.iv_platinum);
+      //  ivPlatinum = (ImageView) rootView.findViewById(R.id.iv_platinum);
 
         lvPremiumBenefits = (ListView) rootView.findViewById(R.id.lv_premium_benefits);
 

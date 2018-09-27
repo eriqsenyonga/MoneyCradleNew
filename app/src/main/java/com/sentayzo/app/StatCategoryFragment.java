@@ -107,6 +107,7 @@ public class StatCategoryFragment extends Fragment {
                 if (isSingleEntity) {
 
                     cursor = mDb.getExpenseCategoryTotals(periodType, specificPeriod, whichOverview, idOfEntity);
+
                 } else {
 
                     cursor = mDb.getExpenseCategoryTotals(periodType, specificPeriod);
@@ -114,8 +115,16 @@ public class StatCategoryFragment extends Fragment {
 
             } else if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
 
-            //// TODO: 3/27/2017 what happens for the custom period
-                // cursor = mDb.getExpenseCategoryTotals(fromDate, toDate);
+
+                if (isSingleEntity) {
+
+                    cursor = mDb.getExpenseCategoryTotalsForDateRange(fromDate, toDate, whichOverview, idOfEntity);
+
+                } else {
+
+                    cursor = mDb.getExpenseCategoryTotalsForDateRange(fromDate, toDate);
+
+                }
 
             }
 
@@ -133,8 +142,16 @@ public class StatCategoryFragment extends Fragment {
 
             } else if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
 
-                // TODO: 3/27/2017 what happens for custom period
-                //   cursor = mDb.getIncomeCategoryTotals(fromDate, toDate);
+
+
+                if (isSingleEntity) {
+                    cursor = mDb.getIncomeCategoryTotalsForDateRange(fromDate, toDate, whichOverview, idOfEntity);
+
+                } else {
+
+                    cursor = mDb.getIncomeCategoryTotalsForDateRange(fromDate, toDate);
+                }
+
 
             }
 
@@ -174,7 +191,7 @@ public class StatCategoryFragment extends Fragment {
             this.specificPeriod = mCC.dateForStatUseFromDisplay(specificPeriod);
         }
 
-        if(this.periodType == StatisticsActivity.PERIOD_YEAR){
+        if (this.periodType == StatisticsActivity.PERIOD_YEAR) {
 
             this.specificPeriod = specificPeriod;
 

@@ -2,8 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.sentayzo.app.UpgradeFragment">
+    tools:context="com.sentayzo.app.UpgradeFragment"
+    android:background="@drawable/upgrade_background">
 
     <include
         android:id="@+id/app_bar"
@@ -22,40 +24,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
-            android:background="@color/primary_light">
+            android:padding="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/primary_light"
-                android:gravity="left"
-                android:paddingTop="8dp"
-                android:paddingLeft="8dp"
-                android:text="@string/basic"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
+            <!--       <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="bottom"
+                       android:background="@color/primary_light"
+                       android:gravity="left"
+                       android:paddingTop="8dp"
+                       android:paddingLeft="8dp"
+                       android:text="@string/basic"
+                       android:textAppearance="?android:attr/textAppearanceLarge"
+                       android:textColor="@color/white"
+                       android:textStyle="bold" />
+       -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primary_light"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:background="@color/primary_light"
                     android:gravity="left"
                     android:paddingLeft="8dp"
                     android:text="@string/block_ads"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/white"
+                    android:textColor="@color/half_black"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.CardView
@@ -63,22 +61,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:background="#000000"
-                    android:gravity="right">
+                    android:gravity="right"
+                    app:cardCornerRadius="10dp"
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="8dp">
+                        android:padding="8dp"
+                        android:background="@drawable/button_shape_remove_ads"
+                        >
 
 
                         <TextView
                             android:id="@+id/tv_price_remove_ads"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="$1.99"
+
                             android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
@@ -103,12 +105,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/blue">
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/blue"
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -117,34 +118,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/blue"
+
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3.5"
                     android:orientation="vertical">
 
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:background="@color/blue"
+
                         android:gravity="left"
                         android:paddingLeft="8dp"
                         android:paddingTop="8dp"
                         android:text="@string/premium"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/white"
+                        android:textColor="#000000"
                         android:textStyle="bold" />
 
                     <ListView
                         android:id="@+id/lv_premium_benefits"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/blue"
+
                         android:divider="@null"
                         android:entries="@array/premium_benefits"
                         android:padding="8dp"
@@ -153,63 +153,66 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_platinum"
-                    android:layout_width="0dp"
-                    android:layout_height="270dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="3"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_money_win" />
+                <!--           <ImageView
+                               android:id="@+id/iv_platinum"
+                               android:layout_width="0dp"
+                               android:layout_height="270dp"
+                               android:layout_marginRight="8dp"
+                               android:layout_weight="3"
+                               android:scaleType="centerCrop"
+                               android:src="@drawable/ic_money_win" />
 
-
+           -->
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/b_monthly"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_shape">
+                    android:layout_marginTop="4dp"
+                    app:cardCornerRadius="10dp"
+                    android:background="@color/blue"
+
+                    >
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:background="@color/blue"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingRight="8dp"
+                        android:gravity="center">
 
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/pay_monthly" />
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="@string/pay_monthly"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="$4.99"
                             android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#FFFFFF"
 
                             />
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="save 0%"
-                            android:visibility="invisible" />
 
 
                     </LinearLayout>
@@ -219,43 +222,64 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/b_quarterly"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="#000000">
+                    app:cardCornerRadius="10dp"
+                    >
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/pay_quarterly"
-
-                            />
+                        android:background="@color/primary"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        >
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/primary"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:text="@string/pay_quarterly"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:text="@string/save_10"
+                                android:textColor="#FFFFFF"
+
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="$4.49"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/white" />
 
                             <TextView
 
@@ -263,22 +287,13 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/per_month"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textColor="@color/white" />
 
 
                             />
 
                         </LinearLayout>
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/save_10"
-                            android:textStyle="bold"
-
-                            />
 
 
                     </LinearLayout>
@@ -288,43 +303,63 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/b_yearly"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="#000000">
+                    android:layout_marginBottom="4dp"
+                    app:cardCornerRadius="10dp"
+                    >
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/pay_yearly"
-
-                            />
+                        android:background="@color/accent"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/accent"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:text="@string/pay_yearly"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="left"
+                                android:text="@string/save_20"
+                                android:textColor="@color/white" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="$3.99"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/white" />
 
                             <TextView
 
@@ -332,22 +367,13 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/per_month"
-                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textColor="@color/white" />
 
 
                             />
 
                         </LinearLayout>
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/save_20"
-                            android:textStyle="bold"
-
-                            />
 
 
                     </LinearLayout>

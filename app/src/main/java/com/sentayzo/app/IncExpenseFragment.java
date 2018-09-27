@@ -180,9 +180,13 @@ public class IncExpenseFragment extends Fragment {
 
         } else if (periodType == StatisticsActivity.PERIOD_CUSTOM) {
 
-            // TODO: 3/27/2017 what happens for custom period
-            //   cursor = mDb.getIncomeCategoryTotals(fromDate, toDate);
+            if (isSingleEntity) {
+                cursor = mDb.getIncomeVsExpenseTotalsForDateRange(fromDate, toDate, whichOverview, idOfEntity);
 
+            } else {
+
+                cursor = mDb.getIncomeVsExpenseTotalsForDateRange(fromDate, toDate);
+            }
         }
 
 

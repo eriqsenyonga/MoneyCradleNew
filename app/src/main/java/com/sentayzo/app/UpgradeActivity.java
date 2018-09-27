@@ -1,5 +1,6 @@
 package com.sentayzo.app;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
     SharedPreferences billingPrefs;
     SharedPreferences.Editor editor;
     SkusAndBillingThings skusAndBillingThings;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +48,10 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.fragment_upgrade);
 
 
+        i = getIntent();
+
         bRemoveAds = (CardView) findViewById(R.id.b_remove_ads);
-        ivPlatinum = (ImageView) findViewById(R.id.iv_platinum);
+        // ivPlatinum = (ImageView) findViewById(R.id.iv_platinum);
         lvPremiumBenefits = (ListView) findViewById(R.id.lv_premium_benefits);
         bMonthly = (CardView) findViewById(R.id.b_monthly);
         bQuarterly = (CardView) findViewById(R.id.b_quarterly);
@@ -92,6 +96,18 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(UpgradeActivity.this, "The billing client is ready. You can query purchases here.", Toast.LENGTH_LONG).show();
 
                     querySkuDetails();
+
+                    if (i.hasExtra("try_free")) {
+
+                        show("Yearly Subscription");
+                        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                .setSku(SkusAndBillingThings.SKU_PREMIUM_YEARLY)
+                                .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                                .build();
+
+
+                        int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+                    }
 
                 }
             }
@@ -231,9 +247,6 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
 
             skusAndBillingThings.setPremiumPurchased(true);
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
-
-
-
 
 
         }

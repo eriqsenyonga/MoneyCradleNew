@@ -701,11 +701,11 @@
     <string name="upgrade">Upgrade</string>
     <string name="basic">Basic</string>
     <string name="premium">Premium</string>
-    <string name="block_ads">Block Ads</string>
-    <string name="pay_monthly">Pay Monthly</string>
-    <string name="pay_quarterly">Pay Quarterly</string>
-    <string name="pay_yearly">Pay Yearly</string>
-    <string name="per_month">/month</string>
+    <string name="block_ads">Block Ads only</string>
+    <string name="pay_monthly">Monthly</string>
+    <string name="pay_quarterly">Quarterly</string>
+    <string name="pay_yearly">Yearly</string>
+    <string name="per_month">Monthly</string>
     <string name="save_10">save 10%</string>
     <string name="save_20">save 20%</string>
     <string name="success_aca">Success Academy</string>
@@ -801,7 +801,7 @@
     </string-array>
 
     <string-array name="premium_benefits">
-        <item>Money Cradle Success Academy</item>
+        <item>Success Academy Full Access</item>
         <item>Unlimited Accounts</item>
         <item>Unlock Statistics Analysis</item>
         <item>Unlimited Projects</item>
