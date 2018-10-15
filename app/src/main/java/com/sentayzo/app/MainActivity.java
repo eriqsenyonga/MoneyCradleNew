@@ -61,11 +61,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button bGetPremium;
     int count = 1;
     SharedPreferences userSharedPrefs;
+    SkusAndBillingThings skusAndBillingThings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+      skusAndBillingThings = new SkusAndBillingThings(MainActivity.this);
 
 
         userSharedPrefs = getSharedPreferences("USER_DETAILS",
@@ -263,8 +266,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         billingEditor.putBoolean("KEY_FREE_TRIAL_PERIOD", false).apply();
 
 
-        if ((billingPrefs.getBoolean("KEY_FREE_TRIAL_PERIOD", true) == false)
-                && (billingPrefs.getBoolean("KEY_PURCHASED_ADS", false) == false)) {
+        if (!skusAndBillingThings.isPurchasedAds()) {
 
             interstitial = new InterstitialAd(MainActivity.this);
 
@@ -640,5 +642,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(skusAndBillingThings.isPremiumUser()){
+
+            skusAndBillingThings.checkSubValidityByExpiryDate();
+
+        }
     }
 }

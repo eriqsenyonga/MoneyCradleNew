@@ -1081,82 +1081,43 @@ public class NewTransaction extends AppCompatActivity implements
         }
 
         if (view == newProjectButton) {
-            String newProjectTitle = getResources().getString(
-                    R.string.newPrTitle);
-            LayoutInflater inflater = getLayoutInflater();
-            String cancel = getResources().getString(R.string.cancel);
-            String save = getResources().getString(R.string.save);
-            View newProjectDialog = inflater.inflate(
-                    R.layout.new_project_dialog, null);
 
-            final EditText etPrName;
-            final EditText etPrNote;
-            etPrName = (EditText) newProjectDialog
-                    .findViewById(R.id.et_project_Name);
-            etPrNote = (EditText) newProjectDialog
-                    .findViewById(R.id.et_project_note);
 
-            AlertDialog.Builder prBuilder = new AlertDialog.Builder(
-                    NewTransaction.this);
-            prBuilder.setTitle(newProjectTitle);
-            prBuilder.setView(newProjectDialog);
-            prBuilder.setNegativeButton(cancel,
-                    new DialogInterface.OnClickListener() {
+            SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(NewTransaction.this);
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
+            Boolean premium = skusAndBillingThings.isPremiumUser();
 
-                        }
-                    });
+            Boolean access = skusAndBillingThings.hasAccess();
 
-            prBuilder.setPositiveButton(save,
-                    new DialogInterface.OnClickListener() {
+            int numberOfProjects = new DbClass(NewTransaction.this)
+                    .getNumberOfProjects();
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
+            if (numberOfProjects < 2) {
 
-                            if (etPrName.getText().length() <= 0) {
+                newProjectDialog();
 
-                                String toastText = getResources().getString(
-                                        R.string.project_name)
-                                        + " "
-                                        + getResources().getString(
-                                        R.string.cantBeEmpty);
+            } else {
 
-                                Toast.makeText(getBaseContext(), toastText,
-                                        Toast.LENGTH_LONG).show();
+                if (premium && access) {
+                    newProjectDialog();
 
-                            }// end if
-                            else {
-                                int open = 1;// 1 symbolizes that the project is
-                                // running
-                                String prName = etPrName.getText().toString();
-                                String prNote = etPrNote.getText().toString();
+                } else if (premium && access == false) {
+                    //account hold so show dialog for account hold
+                    skusAndBillingThings.showAccountHoldDialog();
 
-                                DbClass mDb = new DbClass(NewTransaction.this);
-                                mDb.open();
-                                mDb.insertNewProject(prName, prNote, open);
-                                mDb.close();
+                } else if (!premium) {
 
-                                mLoaderManager.restartLoader(projectLoaderId,
-                                        null, NewTransaction.this);
+                    skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_projects));
+                }
+            }
 
-                            }// end else
-
-                        }
-                    });
-
-            Dialog newPrDialog = prBuilder.create();
-            newPrDialog.show();
 
         }
 
         if (view == addPhoto) {
 
 
-           // ImagePicker.pickImage(this, "Select your image:");
+            // ImagePicker.pickImage(this, "Select your image:");
 
             ImagePicker.with(this)                         //  Initialize ImagePicker with activity or fragment context
                     .setToolbarColor("#212121")         //  Toolbar color
@@ -1170,10 +1131,10 @@ public class NewTransaction extends AppCompatActivity implements
                     .setFolderMode(true)                //  Folder mode
                     .setShowCamera(true)                //  Show camera button
                     .setFolderTitle("Albums")           //  Folder title (works with FolderMode = true)
-                  //  .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
+                    //  .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
                     .setDoneTitle("Done")               //  Done button title
                     .setLimitMessage("You have reached selection limit")    // Selection limit message
-                   // .setMaxSize(10)                     //  Max images can be selected
+                    // .setMaxSize(10)                     //  Max images can be selected
                     .setSavePath("Money Cradle")         //  Image capture folder name
                     .setSelectedImages(new ArrayList<Image>())          //  Selected images
                     .setAlwaysShowDoneButton(true)      //  Set always show done button in multiple mode
@@ -1206,6 +1167,81 @@ public class NewTransaction extends AppCompatActivity implements
 
 
         }
+
+    }
+
+    private void newProjectDialog() {
+
+
+        String newProjectTitle = getResources().getString(
+                R.string.newPrTitle);
+        LayoutInflater inflater = getLayoutInflater();
+        String cancel = getResources().getString(R.string.cancel);
+        String save = getResources().getString(R.string.save);
+        View newProjectDialog = inflater.inflate(
+                R.layout.new_project_dialog, null);
+
+        final EditText etPrName;
+        final EditText etPrNote;
+        etPrName = (EditText) newProjectDialog
+                .findViewById(R.id.et_project_Name);
+        etPrNote = (EditText) newProjectDialog
+                .findViewById(R.id.et_project_note);
+
+        AlertDialog.Builder prBuilder = new AlertDialog.Builder(
+                NewTransaction.this);
+        prBuilder.setTitle(newProjectTitle);
+        prBuilder.setView(newProjectDialog);
+        prBuilder.setNegativeButton(cancel,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+        prBuilder.setPositiveButton(save,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                        if (etPrName.getText().length() <= 0) {
+
+                            String toastText = getResources().getString(
+                                    R.string.project_name)
+                                    + " "
+                                    + getResources().getString(
+                                    R.string.cantBeEmpty);
+
+                            Toast.makeText(getBaseContext(), toastText,
+                                    Toast.LENGTH_LONG).show();
+
+                        }// end if
+                        else {
+                            int open = 1;// 1 symbolizes that the project is
+                            // running
+                            String prName = etPrName.getText().toString();
+                            String prNote = etPrNote.getText().toString();
+
+                            DbClass mDb = new DbClass(NewTransaction.this);
+                            mDb.open();
+                            mDb.insertNewProject(prName, prNote, open);
+                            mDb.close();
+
+                            mLoaderManager.restartLoader(projectLoaderId,
+                                    null, NewTransaction.this);
+
+                        }// end else
+
+                    }
+                });
+
+        Dialog newPrDialog = prBuilder.create();
+        newPrDialog.show();
 
     }
 

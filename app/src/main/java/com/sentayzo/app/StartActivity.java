@@ -27,26 +27,38 @@ public class StartActivity extends Activity {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = billingPrefs.edit();
 
+
+      if( skusAndBillingThings.isAlreadyFullUser()){
+
+    //if user already purchased full version from before
+          //communicate that they are kawa and dont have to do anything really
+
+
+
+
+        }
+
+
         if (billingPrefs.getBoolean("firstTime", true)) {
 
             Log.d("StartActivity", "first_time");
 
-            Long timeNow = System.currentTimeMillis();
+           /* Long timeNow = System.currentTimeMillis();
             Long sevenDays = (long) (7 * 24 * 60 * 60 * 1000);
-            Long endTime = timeNow + sevenDays;
+            Long endTime = timeNow + sevenDays;*/
 
             skusAndBillingThings.setPurchasedAds(false);
-            editor.putBoolean("KEY_PURCHASED_UNLOCK", false);
+          //  editor.putBoolean("KEY_PURCHASED_UNLOCK", false);
             skusAndBillingThings.setPremiumPurchased(false);
-            skusAndBillingThings.setFreeTrialPeriod(true);
+         //   skusAndBillingThings.setFreeTrialPeriod(true);
 
-            editor.putLong("KEY_COUNTER", 0);
+         /*   editor.putLong("KEY_COUNTER", 0);
 
             editor.putLong("KEY_START_DATE_TIME", timeNow);
 
             editor.putLong("KEY_END_OF_FREE_TRIAL_PERIOD", endTime);
 
-            editor.putBoolean("already_executed_end_free_period", false);
+            editor.putBoolean("already_executed_end_free_period", false);*/
 
 
             if (doesDatabaseExist(getApplicationContext(), DATABASE_NAME) == true) {
@@ -61,15 +73,16 @@ public class StartActivity extends Activity {
             }
 
 
-            editor.putBoolean("firstTime", false);
+            editor.putBoolean("firstTime", false).apply();
 
-            editor.apply();
 
-            Intent i = new Intent(this, AlarmService.class);
+       /*     Intent i = new Intent(this, AlarmService.class);
 
             i.putExtra("endTime", endTime);
 
             startService(i);
+
+            */
 
             Intent intent = new Intent(StartActivity.this, IntroActivity.class);
             intent.putExtra("zero", 0);
@@ -98,6 +111,14 @@ public class StartActivity extends Activity {
 
         }
 
+
+   /*     if(skusAndBillingThings.isPremiumUser()){
+
+            skusAndBillingThings.checkSubValidityByExpiryDate();
+
+        }
+*/
+
         userSharedPrefs = getSharedPreferences("USER_DETAILS",
                 Context.MODE_PRIVATE);
 
@@ -106,12 +127,11 @@ public class StartActivity extends Activity {
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra("zero", 0);
             startActivity(intent);
-
             finish();
 
         } else{
 
-            Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+            Intent intent = new Intent(StartActivity.this, IntroActivity.class);
             intent.putExtra("zero", 0);
             startActivity(intent);
 

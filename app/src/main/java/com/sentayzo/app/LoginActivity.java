@@ -17,6 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -38,7 +44,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,6 +57,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_GOOGLE_SIGN_IN = 50;
     private static final String EMAIL = "email";
     private static final String AUTH_TYPE = "rerequest";
+    String CHECK_IF_PREMIUM_USER = "http://moneycradle.plexosys-consult.com/checkIfUserPremiumByEmail.php";
+
 
     TextView tvForgotPassword, tvSignUp;
     FirebaseAuth mAuth;
@@ -255,7 +268,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //  Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             saveUserDetailsInSharedPrefs(user.getEmail(), user.getDisplayName());
-                            goToMainActivity();
+
+                            checkOnlineIfUserIsPremium(user.getEmail());
+
                         } else {
                             // If sign in fails, display a message to the user.
                             //    Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -270,6 +285,90 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    private void checkOnlineIfUserIsPremium(final String email) {
+
+        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, CHECK_IF_PREMIUM_USER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        if (response.equalsIgnoreCase("not exist")) {
+
+                            goToMainActivity();
+
+                        } else {
+
+                            getTheSubscriptionDetails(email, response);
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof NoConnectionError) {
+
+
+                            Toast.makeText(LoginActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, R.string.something_went_wr, Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("email", email);
+
+
+                return map;
+            }
+        };
+
+        applicationClass.add(saveToDbRequest);
+
+
+    }
+
+    private void getTheSubscriptionDetails(final String email, String jsonResponse) {
+
+/*
+Sample jsonResponse
+        {
+            "purchase_token": "fikjchconfbppmihiobobonf.AO-J1OymYHAmGlpOECNnT7QDVR_0TI2J8ct7xsjjkMHs57cwoI1zENwBxXchZ3tkaJ_7ic-B3Wdus8b3y8bQM7tbSXCWA_dAMi5olouM2f8oMcWRGWx8zxTg3AZRtLpDrgnGlOM4fqIy",
+                "purchase_sku": "sku_premium_monthly",
+                "expiry_time": "1539110398515"
+        }
+*/
+
+        SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(LoginActivity.this);
+
+
+        try {
+            JSONObject details = new JSONObject(jsonResponse);
+
+            skusAndBillingThings.setPremiumPurchased(true);
+            skusAndBillingThings.setPremiumPurchaseToken(details.getString("purchase_token"));
+            skusAndBillingThings.setSubscriptionExpiryDate(details.getLong("expiry_time"));
+            skusAndBillingThings.setWhichSku(details.getString("purchase_sku"));
+         //   skusAndBillingThings.checkSubValidityByExpiryDate();
+            hideLoadingPanel();
+            goToMainActivity();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     private void signInUser(String email, String password) {
 
 
@@ -282,7 +381,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //   Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             saveUserDetailsInSharedPrefs(user.getEmail(), user.getDisplayName());
-                            goToMainActivity();
+                            checkOnlineIfUserIsPremium(user.getEmail());
 
 
                         } else {

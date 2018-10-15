@@ -1,5 +1,6 @@
 package com.sentayzo.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -22,18 +24,31 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.sentayzo.app.SkusAndBillingThings;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class UpgradeActivity extends AppCompatActivity implements View.OnClickListener, PurchasesUpdatedListener {
 
     ImageView ivPlatinum;
     ListView lvPremiumBenefits;
-    CardView bRemoveAds, bMonthly, bQuarterly, bYearly;
+    CardView bRemoveAds, bMonthly, bQuarterly, bYearly, cardBlockAds;
     Toolbar toolBar;
     TextView tvRemoveAds;
     private BillingClient mBillingClient;
@@ -41,6 +56,10 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
     SharedPreferences.Editor editor;
     SkusAndBillingThings skusAndBillingThings;
     Intent i;
+    String SAVE_TO_DB_URL = "http://moneycradle.plexosys-consult.com/saveSubToDb.php";
+    String VERIFY_TOKEN_SAVE_TO_DB = "http://moneycradle.plexosys-consult.com/verifyTokenAndSaveToDb.php";
+    ApplicationClass applicationClass = ApplicationClass.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +76,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         bQuarterly = (CardView) findViewById(R.id.b_quarterly);
         bYearly = (CardView) findViewById(R.id.b_yearly);
         tvRemoveAds = findViewById(R.id.tv_price_remove_ads);
+        cardBlockAds = findViewById(R.id.card_block_ads_only);
 
         skusAndBillingThings = new SkusAndBillingThings(UpgradeActivity.this);
 
@@ -81,6 +101,37 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
 
         editor = billingPrefs.edit();
 
+        if (skusAndBillingThings.isPremiumUser()) {
+//hide the premium feature that was purchased and also hide block ads only
+
+            cardBlockAds.setVisibility(View.GONE);
+
+            if (skusAndBillingThings.getWhichSku().equals(SkusAndBillingThings.SKU_PREMIUM_MONTHLY)) {
+
+                bMonthly.setVisibility(View.GONE);
+
+            } else if (skusAndBillingThings.getWhichSku().equals(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY)) {
+                bQuarterly.setVisibility(View.GONE);
+
+
+            }
+            if (skusAndBillingThings.getWhichSku().equals(SkusAndBillingThings.SKU_PREMIUM_YEARLY)) {
+
+                bYearly.setVisibility(View.GONE);
+
+            }
+        }
+
+
+        if (skusAndBillingThings.isPurchasedAds()) {
+
+            cardBlockAds.setVisibility(View.GONE);
+
+        } else {
+
+            cardBlockAds.setVisibility(View.VISIBLE);
+        }
+
 
         // create new Person
 
@@ -95,7 +146,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
                     // The billing client is ready. You can query purchases here.
                     Toast.makeText(UpgradeActivity.this, "The billing client is ready. You can query purchases here.", Toast.LENGTH_LONG).show();
 
-                    querySkuDetails();
+                    //   querySkuDetails();
 
                     if (i.hasExtra("try_free")) {
 
@@ -129,7 +180,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         bQuarterly.setOnClickListener(this);
 
     }
-
+/*
     private void querySkuDetails() {
 
 
@@ -145,16 +196,16 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
                         // Process the result.
-                        Toast.makeText(UpgradeActivity.this, "Query details", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(UpgradeActivity.this, "Query details", Toast.LENGTH_LONG).show();
 
                         if (responseCode == BillingClient.BillingResponse.OK
                                 && skuDetailsList != null) {
 
-                            Toast.makeText(UpgradeActivity.this, "Query details 2", Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(UpgradeActivity.this, "Query details 2", Toast.LENGTH_LONG).show();
 
                             for (SkuDetails skuDetails : skuDetailsList) {
 
-                                Toast.makeText(UpgradeActivity.this, "Query details 3", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(UpgradeActivity.this, "Query details 3", Toast.LENGTH_LONG).show();
 
                                 String sku = skuDetails.getSku();
                                 String price = skuDetails.getPrice();
@@ -168,6 +219,8 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
     }
+
+  */
 
     @Override
     public void onClick(View v) {
@@ -246,8 +299,29 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
             //do server verification and then update sharedPrefs
 
             skusAndBillingThings.setPremiumPurchased(true);
+            skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY);
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
+            Log.d("Original Json", purchase.getOriginalJson());
 
+
+            //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
+
+            verifyTokenAndSaveToDb(purchase.getPurchaseToken(), purchase.getSku());
+
+/*
+
+THIS IS THE FORMAT OF THE ORGINAL JSON
+            {
+                "orderId": "GPA.3347-3227-2419-64404",
+                    "packageName": "com.sentayzo.app",
+                    "productId": "sku_premium_monthly",
+                    "purchaseTime": 1538436442764,
+                    "purchaseState": 0,
+                    "purchaseToken": "bcdlpdabcobjekhbfnnejdef.AO-J1Own735J9-IlgFBto3UaaSQ0nK7ZivOvK_PGoRCB7XgNzcIX-_pB9P12hXy38ME4rwipvouM3ti8hzZKTzFs2jBlAuYe26AVBDnVzlfm75Q8SUY7b0wA0Sz22_GyD1cmg2wrg4J-",
+                    "autoRenewing": true
+            }
+
+*/
 
         }
 
@@ -256,12 +330,25 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
 
             skusAndBillingThings.setPremiumPurchased(true);
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
+            skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY);
+
+
+            //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
+            verifyTokenAndSaveToDb(purchase.getPurchaseToken(), purchase.getSku());
+
+
         }
 
         if (purchase.getSku().equals(SkusAndBillingThings.SKU_PREMIUM_YEARLY)) {
             //if yearly subscription, open content for the year and set recurring date to 1 YEAR from now
             skusAndBillingThings.setPremiumPurchased(true);
+            skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_YEARLY);
+
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
+
+            //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
+            verifyTokenAndSaveToDb(purchase.getPurchaseToken(), purchase.getSku());
+
 
         }
 
@@ -271,6 +358,155 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
             skusAndBillingThings.setPurchasedAds(true);//            purchase.get
 
 
+        }
+
+    }
+
+
+    private void saveSubscriptionToDb(final String purchaseToken, final String purchaseSku, final String orderId) {
+
+
+        SharedPreferences userSharedPrefs = getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
+
+        final String email = userSharedPrefs.getString("email", "");
+
+        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, SAVE_TO_DB_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Toast.makeText(UpgradeActivity.this, response + " saving to db", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(UpgradeActivity.this, "Error saving to db", Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("email", email);
+                map.put("purchase_token", purchaseToken);
+                map.put("order_id", orderId);
+                map.put("purchase_sku", purchaseSku);
+
+                return map;
+            }
+        };
+
+
+        applicationClass.add(saveToDbRequest);
+
+    }
+
+
+    public void verifyTokenAndSaveToDb(final String purchaseToken, final String purchaseSku) {
+
+
+        SharedPreferences userSharedPrefs = getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
+
+        final String email = userSharedPrefs.getString("email", "");
+
+        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, VERIFY_TOKEN_SAVE_TO_DB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Toast.makeText(UpgradeActivity.this, " savED to db", Toast.LENGTH_LONG).show();
+
+
+                        if (response.substring(0, 1).equalsIgnoreCase("{")) {
+
+                            //if the response is valid json as opposed to fatal errors
+
+                            handlePurchaseJsonResponseFromServer(response);
+
+
+                        } else {
+                            Toast.makeText(UpgradeActivity.this, " Something went wrong", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(UpgradeActivity.this, "Error saving to db", Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("email", email);
+                map.put("purchase_token", purchaseToken);
+                map.put("purchase_sku", purchaseSku);
+
+                return map;
+            }
+        };
+
+
+        applicationClass.add(saveToDbRequest);
+
+
+    }
+
+    private void handlePurchaseJsonResponseFromServer(String response) {
+      /*
+       sample json from server
+
+       {
+            "autoRenewing": true,
+                "cancelReason": null,
+                "countryCode": "UG",
+                "developerPayload": "",
+                "emailAddress": null,
+                "expiryTimeMillis": "1538684443548",
+                "familyName": null,
+                "givenName": null,
+                "kind": "androidpublisher#subscriptionPurchase",
+                "linkedPurchaseToken": null,
+                "orderId": "GPA.3370-8983-9561-97544",
+                "paymentState": 1,
+                "priceAmountMicros": "47880000",
+                "priceCurrencyCode": "USD",
+                "profileId": null,
+                "profileName": null,
+                "purchaseType": 0,
+                "startTimeMillis": "1538682526968",
+                "userCancellationTimeMillis": null
+        }*/
+
+        try {
+
+            JSONObject purchaseObject = new JSONObject(response);
+
+            long expiryDate = purchaseObject.getLong("expiryTimeMillis");
+            int paymentState = purchaseObject.getInt("paymentState");
+
+
+            skusAndBillingThings.setSubscriptionExpiryDateAndPaymentState(expiryDate, paymentState);
+
+            //time in milliseconds: long timeInMillis = System.currentTimeMillis();
+       //     long timeInMillis = System.currentTimeMillis();
+
+            startActivity(new Intent(UpgradeActivity.this, MainActivity.class));
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 

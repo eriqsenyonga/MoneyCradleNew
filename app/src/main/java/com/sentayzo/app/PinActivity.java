@@ -1,5 +1,6 @@
 package com.sentayzo.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,13 +21,14 @@ import com.google.android.gms.analytics.Tracker;
 
 public class PinActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPrefs;
+    SharedPreferences sharedPrefs, userSharedPrefs;
     EditText ed1, ed2, ed3, ed4;
     String p1 = "0", p2 = "0", p3 = "0", p4 = "0";
     String PINstring;
     String savedPIN;
     Tracker t;
     Toolbar toolBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,14 @@ public class PinActivity extends AppCompatActivity {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         savedPIN = sharedPrefs.getString("pref_PIN_entry", "0001");
 
-        Log.d("savedPIN is", savedPIN);
+        // Log.d("savedPIN is", savedPIN);
+
+        if(savedPIN.length() > 4){
+
+            savedPIN = savedPIN.substring(0,4);
+
+
+        }
 
         ed1 = (EditText) findViewById(R.id.et_PIN1);
         ed2 = (EditText) findViewById(R.id.et_PIN2);
@@ -169,15 +178,10 @@ public class PinActivity extends AppCompatActivity {
 
                     PINstring = e1 + e2 + e3 + e4;
 
-                    Log.d("PINstring is ", PINstring);
 
                     if (PINstring.equals(savedPIN)) {
 
-                        Intent i = new Intent(PinActivity.this, MainActivity.class);
-                        i.putExtra("zero", 0);
-                        startActivity(i);
-
-                        finish();
+                        proceedToEitherLoginOrMainActivity();
 
                     }
 				
@@ -232,5 +236,33 @@ public class PinActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void proceedToEitherLoginOrMainActivity() {
+
+
+        userSharedPrefs = getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
+
+        if (userSharedPrefs.getBoolean("logged_in", false)) {
+
+            Intent intent = new Intent(PinActivity.this, MainActivity.class);
+            intent.putExtra("zero", 0);
+            startActivity(intent);
+            finish();
+
+        } else {
+
+            Intent intent = new Intent(PinActivity.this, LoginActivity.class);
+            intent.putExtra("zero", 0);
+            startActivity(intent);
+
+            finish();
+
+
+        }
+
+
     }
 }

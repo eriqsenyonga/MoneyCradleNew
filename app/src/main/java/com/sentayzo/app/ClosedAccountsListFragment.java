@@ -178,13 +178,24 @@ public class ClosedAccountsListFragment extends ListFragment implements
                         if (which == 0) {
                             // if reopen is clicked
 
-                            if (freePeriod == true || unlocked == true) {
+                            SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(getActivity());
 
+                            boolean premium = skusAndBillingThings.isPremiumUser();
+
+                            boolean access = skusAndBillingThings.hasAccess();
+
+                            if (premium && access) {
                                 showReopenDialog(accountId);
-                            } else {
+
+                            } else if (premium && access == false) {
+                                //account hold so show dialog for account hold
+                                skusAndBillingThings.showAccountHoldDialog();
+
+                            } else if (premium == false) {
 
                                 showPaymentDialog(getActivity());
                             }
+
 
                         }
 

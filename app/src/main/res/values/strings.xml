@@ -282,7 +282,7 @@
     <string name="no_closed_accounts">No closed accounts </string>
     <string name="reopen">Re-open account</string>
     <string name="reopenDialog_title">Re-open account?</string>
-    <string name="reopenDialog_message">This account will be made accessible in the \'Accounts\' tab</string>
+    <string name="reopenDialog_message">This account will be made accessible in the \'Accounts\' tab on Home Screen</string>
     <string name="newTransfer">New Transfer</string>
     <string name="edited"> edited</string>
     <string name="deleteCategory">This category will be deleted and all it\'s transactions set to \'Undefined\'</string>
@@ -725,6 +725,12 @@
     <string name="upgrade_success_academy">To fully access Success Academy, upgrade to Premium</string>
     <string name="show_premium_plans">Show Premium Plans</string>
     <string name="try_for_free">Try For Free</string>
+    <string name="checking_subscription_status">Checking subscription status</string>
+    <string name="subscription_problem">Subscription problem</string>
+    <string name="account_hold_description">There\'s a problem with your subscription. Go to the Google Play subscription settings to fix your payment on Google Play.</string>
+    <string name="subscription_settings">Subscription Settings</string>
+    <string name="something_went_wr">Something went wrong</string>
+    <string name="no_internet">Error: No internet connection</string>
 
     <string-array name="initial_categories">
         <item>Undefined</item>

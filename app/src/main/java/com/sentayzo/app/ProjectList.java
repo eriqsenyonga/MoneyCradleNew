@@ -110,40 +110,36 @@ public class ProjectList extends ListFragment implements
             @Override
             public void onClick(View v) {
 
-                Boolean freePeriod = billingPrefs.getBoolean("KEY_FREE_TRIAL_PERIOD",
-                        true);
-                Boolean unlocked = billingPrefs.getBoolean("KEY_PURCHASED_UNLOCK",
-                        false);
 
+                SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(getActivity());
 
-                if (freePeriod == true || unlocked == true) {
-                    //      Log.d("if free trial or unlocked",
-                    //             "in if free trial or unlocked");
+                Boolean premium = skusAndBillingThings.isPremiumUser();
+
+                Boolean access = skusAndBillingThings.hasAccess();
+
+                int numberOfProjects = new DbClass(getActivity())
+                        .getNumberOfProjects();
+
+                if (numberOfProjects < 2) {
+
                     newProjectDialog();
 
                 } else {
 
-                    // if free trial has expired and nigga hasnt paid for shit
-                    int numberOfProjects = new DbClass(getActivity())
-                            .getNumberOfProjects();
-
-                    if (numberOfProjects < 2) {
-
-                        //        Log.d("if NOT free trial or unlocked BUT LESS THAN 2",
-                        //                "in if NOT free trial or unlocked BUT LESS THAN 2");
+                    if (premium && access) {
                         newProjectDialog();
 
-                    } else {
-                        //      Log.d("if NOT free trial or unlocked AT ALL",
-                        //              "in if NOT free trial or unlocked AT ALL");
+                    } else if (premium && access == false) {
+                        //account hold so show dialog for account hold
+                        skusAndBillingThings.showAccountHoldDialog();
 
+                    } else if (!premium) {
 
                         skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_projects));
-
                     }
-
-
                 }
+
+
             }
         });
     }

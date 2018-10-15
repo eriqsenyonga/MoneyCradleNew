@@ -3,6 +3,9 @@ package com.sentayzo.app;
 import android.app.Application;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.FirebaseApp;
@@ -13,6 +16,12 @@ import java.util.HashMap;
 public class ApplicationClass extends Application {
  
 	// The following line should be changed to include the correct property id.
+
+
+    private RequestQueue mRequestQueue;
+    public static final String TAG = ApplicationClass.class.getName();
+
+
     private static final String PROPERTY_ID = "UA-57249913-2";
 
     public static int GENERAL_TRACKER = 0;
@@ -50,6 +59,8 @@ public class ApplicationClass extends Application {
         super.onCreate();
 
         mInstance = this;
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+
         FirebaseApp.initializeApp(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -62,6 +73,20 @@ public class ApplicationClass extends Application {
 
     public static synchronized ApplicationClass getInstance() {
         return mInstance;
+    }
+
+    public RequestQueue getRequestQueue() {
+        return mRequestQueue;
+    }
+
+    public <T> void add(Request<T> req) {
+        req.setTag(TAG);
+        getRequestQueue().add(req);
+    }
+
+    public void cancel() {
+
+        mRequestQueue.cancelAll(TAG);
     }
 }
 

@@ -6,11 +6,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -20,15 +36,17 @@ public class SkusAndBillingThings {
     public static String SKU_PREMIUM_QUARTERLY = "sku_premium_quarterly";
     public static String SKU_PREMIUM_YEARLY = "sku_premium_yearly";
     public static String SKU_REMOVE_ADS = "sku_remove_ads";
-
     public static String KEY_FREE_TRIAL_PERIOD = "KEY_FREE_TRIAL_PERIOD";
-
     public static String KEY_PURCHASED_ADS = "KEY_PURCHASED_ADS";
     public static String KEY_PURCHASED_UNLOCK = "KEY_PURCHASED_UNLOCK"; //this is from the previous billing method
     public static String KEY_PURCHASED_PREMIUM_ADS = "KEY_PURCHASED_PREMIUM_ADS";
     public static String KEY_PURCHASED_PREMIUM = "KEY_PURCHASED_PREMIUM"; // this is the new subscription stunt
     public static String KEY_PURCHASE_TOKEN = "KEY_PURCHASE_TOKEN";
-
+    public static String KEY_WHICH_SUBSCRIPTION_SKU = "KEY_WHICH_SUBSCRIPTION_SKU";
+    public static String KEY_PAYMENT_STATE = "KEY_PAYMENT_STATE";
+    public static String KEY_HAS_ACCESS = "KEY_HAS_ACCESS";
+    String VERIFY_TOKEN_SAVE_TO_DB = "http://moneycradle.plexosys-consult.com/verifyTokenAndSaveToDb.php";
+    ApplicationClass applicationClass = ApplicationClass.getInstance();
     public static String KEY_BILLING_PREFS = "my_billing_prefs";
 
     public static String KEY_SUBSCRIPTION_EXPIRY_DATE = "expiry_date";
@@ -37,6 +55,7 @@ public class SkusAndBillingThings {
 
     SharedPreferences billingPrefs;
     SharedPreferences.Editor editor;
+    Dialog checkingSubDialog;
 
 
     public SkusAndBillingThings(Context c) {
@@ -44,6 +63,13 @@ public class SkusAndBillingThings {
         context = c;
         billingPrefs = context.getSharedPreferences(KEY_BILLING_PREFS, MODE_PRIVATE);
         editor = billingPrefs.edit();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View v = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
+        builder.setCancelable(false);
+        checkingSubDialog = builder.create();
+
 
     }
 
@@ -89,11 +115,33 @@ public class SkusAndBillingThings {
         //if premium is purchased true
         editor.putBoolean(KEY_PURCHASED_PREMIUM_ADS, bool).apply();
         editor.putBoolean(KEY_PURCHASED_PREMIUM, bool).apply();
+        editor.putBoolean(KEY_HAS_ACCESS, bool).apply();
 
     }
 
-    public void setSubscriptionExpiryDate(long expiryDate) {
+    public void setWhichSku(String sku) {
+
+        editor.putString(KEY_WHICH_SUBSCRIPTION_SKU, sku).apply();
+
+
+    }
+
+    public String getWhichSku() {
+
+        return billingPrefs.getString(KEY_WHICH_SUBSCRIPTION_SKU, "");
+
+    }
+
+    public String getPurchaseToken() {
+        return billingPrefs.getString(KEY_PURCHASE_TOKEN, "");
+    }
+
+    public void setSubscriptionExpiryDateAndPaymentState(long expiryDate, int paymentState) {
         editor.putLong(KEY_SUBSCRIPTION_EXPIRY_DATE, expiryDate).apply();
+        editor.putInt(KEY_PAYMENT_STATE, paymentState).apply();
+
+        setHasAccess(expiryDate);
+
 
     }
 
@@ -204,5 +252,253 @@ public class SkusAndBillingThings {
 
     }
 
+    public void showAccountHoldDialog() {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View v = LayoutInflater.from(context).inflate(R.layout.dialog_account_hold, null);
+        CardView bSubscriptionSettings = v.findViewById(R.id.b_sub_settings);
+
+        builder.setView(v);
+        builder.setCancelable(true);
+
+        bSubscriptionSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String url = "https://play.google.com/store/account/subscriptions?sku=" + getWhichSku() + "&package=com.sentayzo.app";
+                Uri webpage = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                context.startActivity(intent);
+
+            }
+        });
+
+        Dialog accountHoldDialog = builder.create();
+        accountHoldDialog.show();
+
+    }
+
+
+    public void setHasAccess(long expiryTimeMillis) {
+
+        if (expiryTimeMillis > System.currentTimeMillis()) {
+//If expiry is in the future, then, has access
+
+            setHasAccess(true);
+        } else {
+//if expiry is in the past, then has no access
+            setHasAccess(false);
+
+        }
+
+    }
+
+    public void setHasAccess(boolean bool) {
+
+
+        editor.putBoolean(KEY_HAS_ACCESS, bool).apply();
+
+
+    }
+
+    public boolean hasAccess() {
+
+        return billingPrefs.getBoolean(KEY_HAS_ACCESS, false);
+
+    }
+
+
+    public void checkSubValidityByExpiryDate() {
+
+
+        long expiryDate = billingPrefs.getLong(KEY_SUBSCRIPTION_EXPIRY_DATE, 0);
+
+        if (expiryDate > System.currentTimeMillis()) {
+
+            //if expiry in future
+            setHasAccess(true);
+
+        } else {
+
+            //if the expiry date is in the past, then the user hasnt paid for something yet or it has just not been updated yet
+            //so check online to verify the actual current status
+
+            checkOnlineForUpdatedCurrentStatus();
+
+
+        }
+
+
+    }
+
+    private void checkOnlineForUpdatedCurrentStatus() {
+
+        checkingSubDialog.show();
+
+        SharedPreferences userSharedPrefs = context.getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
+
+        final String email = userSharedPrefs.getString("email", "");
+        final String purchaseToken = getPurchaseToken();
+        final String purchaseSku = getWhichSku();
+
+        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, VERIFY_TOKEN_SAVE_TO_DB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        //     Toast.makeText(UpgradeActivity.this, " savED to db", Toast.LENGTH_LONG).show();
+
+
+                        if (response.substring(0, 1).equalsIgnoreCase("{")) {
+
+                            //if the response is valid json as opposed to fatal errors
+
+                            handlePurchaseJsonResponseFromServer(response);
+
+
+                        } else {
+                            checkingSubDialog.cancel();
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof NoConnectionError) {
+
+                            setHasAccess(false);
+                            Toast.makeText(context, "Error: No internet connection ", Toast.LENGTH_LONG).show();
+
+                        } else {
+
+
+                            setHasAccess(false);
+                            Toast.makeText(context, "Error checking subscription status", Toast.LENGTH_LONG).show();
+                        }
+
+                        checkingSubDialog.cancel();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("email", email);
+                map.put("purchase_token", purchaseToken);
+                map.put("purchase_sku", purchaseSku);
+
+                return map;
+            }
+        };
+
+        applicationClass.add(saveToDbRequest);
+
+    }
+
+    private void handlePurchaseJsonResponseFromServer(String response) {
+
+
+          /*
+       sample json from server
+
+       {
+            "autoRenewing": true,
+                "cancelReason": null,
+                "countryCode": "UG",
+                "developerPayload": "",
+                "emailAddress": null,
+                "expiryTimeMillis": "1538684443548",
+                "familyName": null,
+                "givenName": null,
+                "kind": "androidpublisher#subscriptionPurchase",
+                "linkedPurchaseToken": null,
+                "orderId": "GPA.3370-8983-9561-97544",
+                "paymentState": 1,
+                "priceAmountMicros": "47880000",
+                "priceCurrencyCode": "USD",
+                "profileId": null,
+                "profileName": null,
+                "purchaseType": 0,
+                "startTimeMillis": "1538682526968",
+                "userCancellationTimeMillis": null
+        }*/
+
+        try {
+
+            JSONObject purchaseObject = new JSONObject(response);
+
+            long expiryDate = purchaseObject.getLong("expiryTimeMillis");
+
+            if (purchaseObject.isNull("paymentState")) {
+
+                if (expiryDate > System.currentTimeMillis()) {
+                    //if payment state is null and expiry in future, grant access
+
+                    setHasAccess(true);
+
+                } else {
+
+                    setHasAccess(false);
+                    setPremiumPurchased(false);
+                    // remove extra accounts
+                    new DbClass(context).closeExtraAccountsIfAny();
+
+
+                }
+
+            } else {
+
+                int paymentState = purchaseObject.getInt("paymentState");
+
+                setSubscriptionExpiryDateAndPaymentState(expiryDate, paymentState);
+
+                if (paymentState == 0 && expiryDate < System.currentTimeMillis()) {
+
+                    //hasnt paid and expiry is in the past, account is onHold
+
+                    setHasAccess(false);
+
+
+                } else if (paymentState == 1 && expiryDate > System.currentTimeMillis()) {
+                    //if has paid
+                    setHasAccess(true);
+
+                } else if (paymentState == 0 && expiryDate > System.currentTimeMillis()) {
+                    //hasnt paid and expiry in future, account is in Grace period
+
+                    setHasAccess(true);
+
+
+                } else if (purchaseObject.getInt("cancelReason") >= 0 && expiryDate < System.currentTimeMillis()) {
+                    //if the subscription was cancelled for any reason and expiryDate is in the past
+                    //cancelReason
+
+                    setHasAccess(false);
+                    setPremiumPurchased(false);
+
+                    // remove extra accounts
+                    new DbClass(context).closeExtraAccountsIfAny();
+
+                }
+            }
+            checkingSubDialog.cancel();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void setSubscriptionExpiryDate(long expiryDate) {
+
+        editor.putLong(KEY_SUBSCRIPTION_EXPIRY_DATE, expiryDate).apply();
+        // editor.putInt(KEY_PAYMENT_STATE, paymentState).apply();
+        setHasAccess(expiryDate);
+    }
 }

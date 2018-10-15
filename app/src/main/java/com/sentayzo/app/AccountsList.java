@@ -569,39 +569,47 @@ public class AccountsList extends Fragment {
 
                 SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(getActivity());
 
-
-                Boolean freePeriod = skusAndBillingThings.isFreeTrialPeriod();
-                Boolean unlocked = billingPrefs.getBoolean("KEY_PURCHASED_UNLOCK",
-                        false);
-
                 Boolean premium = skusAndBillingThings.isPremiumUser();
 
-                if (freePeriod || unlocked) {
+                Boolean access = skusAndBillingThings.hasAccess();
 
+
+                int numberOfAccounts = new DbClass(getActivity())
+                        .getNumberOfAccounts();
+
+                if (numberOfAccounts < 2) {
                     Intent i = new Intent(getActivity(), NewAccount.class);
                     startActivity(i);
-                } else if (freePeriod == false && unlocked == false) {
-                    // if free trial has expired and nigga hasnt paid for shit
-                    int numberOfAccounts = new DbClass(getActivity())
-                            .getNumberOfAccounts();
 
-                    if (numberOfAccounts < 2) {
+                } else {
+
+                    if (premium && access) {
                         Intent i = new Intent(getActivity(), NewAccount.class);
                         startActivity(i);
 
-                    } else {
+                    } else if (premium && access == false) {
+                        //account hold so show dialog for account hold
+
+                        skusAndBillingThings.showAccountHoldDialog();
+
+
+                    } else if (!premium) {
 
                         showPaymentDialog(getActivity());
+
 
                     }
 
                 }
 
+
             }
         });
 
 
-        fabNewTrn.setOnClickListener(new View.OnClickListener() {
+        fabNewTrn.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
                 DbClass mDbClass = new DbClass(getActivity());
@@ -660,7 +668,9 @@ public class AccountsList extends Fragment {
             }
         });
 
-        fabNewTransfer.setOnClickListener(new View.OnClickListener() {
+        fabNewTransfer.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
                 int numberOfAccounts = new DbClass(getActivity())

@@ -83,29 +83,36 @@ public class PendingTxFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Boolean freePeriod = billingPrefs.getBoolean("KEY_FREE_TRIAL_PERIOD",
-                        true);
-                Boolean unlocked = billingPrefs.getBoolean("KEY_PURCHASED_UNLOCK",
-                        false);
+                SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(getActivity());
 
+                Boolean premium = skusAndBillingThings.isPremiumUser();
 
-                if (freePeriod == true || unlocked == true) {
+                Boolean access = skusAndBillingThings.hasAccess();
+
+                int numberOfSch = new DbClass(getActivity())
+                        .getNumberOfProjects();
+
+                if (numberOfSch < 1) {
                     Intent i = new Intent(getActivity(),
                             NewScheduledTransactionActivity.class);
                     startActivity(i);
-                } else {
-                    // if free trial has expired and nigga hasnt paid for shit
-                    int numberOfSch = new DbClass(getActivity())
-                            .getNumberOfProjects();
 
-                    if (numberOfSch < 1) {
-                        Intent i = new Intent(getActivity(),
-                                NewScheduledTransactionActivity.class);
+                } else {
+
+                    if (premium && access) {
+                        Intent i = new Intent(getActivity(), NewScheduledTransactionActivity.class);
                         startActivity(i);
 
-                    } else {
+                    } else if (premium && access == false) {
+                        //account hold so show dialog for account hold
+
+                        skusAndBillingThings.showAccountHoldDialog();
+
+
+                    } else if (!premium) {
 
                         showPaymentDialog(getActivity());
+
 
                     }
 
@@ -305,41 +312,6 @@ public class PendingTxFragment extends Fragment {
         SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(context);
         skusAndBillingThings.showPaymentDialog(getString(R.string.upgrade_unlimited_planned));
 
-
-    /*    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setMessage(context.getResources().getString(
-                R.string.payment_dialog_message)
-                + "\n\n"
-                + context.getResources()
-                .getString(R.string.unlock_all_features) + " ?");
-
-        builder.setNegativeButton(
-                context.getResources().getString(R.string.no),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                    }
-                });
-
-        builder.setPositiveButton(context.getResources()
-                        .getString(R.string.yes),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        Intent i = new Intent(context, UpgradeActivity.class);
-                        startActivity(i);
-                    }
-                });
-
-        Dialog paymentDialog = builder.create();
-        paymentDialog.show();*/
 
     }
 
