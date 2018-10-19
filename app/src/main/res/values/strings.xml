@@ -435,7 +435,7 @@
  <p>
  As we carry on with our daily lives there are some things we begin to do as routine.
  This feature is included to help you <b>reduce the work</b> you have to do by entering future transactions.
- These transactions can be set to occur <b>once, daily, weekly, monthly or annualy</b>.
+ These transactions can be set to occur <b>once, daily, weekly, monthly or annually</b>.
  An example of a recurring transaction could be receiving your salary.
  </p>
  
@@ -731,6 +731,15 @@
     <string name="subscription_settings">Subscription Settings</string>
     <string name="something_went_wr">Something went wrong</string>
     <string name="no_internet">Error: No internet connection</string>
+    <string name="finance_manager">Finance Manager</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="view_all_your_accounts_and_transaction_history">View all your accounts and transaction history.</string>
+    <string name="get_easy_to_read_charts_showing_your_income_and_expenses">Get easy to read charts showing your income and expenses.</string>
+    <string name="track_your_income_and_expenses_by_category_and_projects">Track your income and expenses by category and projects.</string>
+    <string name="discover_the_best_practices_to_grow_your_financial_intelligence">Discover the best practices to grow your financial intelligence.</string>
+    <string name="easily_set_up_planned_future_transactions_and_recurring_transactions">Easily set up planned future transactions and recurring transactions.</string>
+    <string name="money_cr">Money Cradle - Finance Manager</string>
+    <string name="subtitle">Life is so much better when you are on top of your finances</string>
 
     <string-array name="initial_categories">
         <item>Undefined</item>

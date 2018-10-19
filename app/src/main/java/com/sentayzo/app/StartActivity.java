@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.File;
 
@@ -16,10 +18,27 @@ public class StartActivity extends Activity {
     Boolean PIN;
     String DATABASE_NAME = "sentayzoDb.db";
     SkusAndBillingThings skusAndBillingThings;
+  //  Typeface productSansBold, productSansRegular;
+   // TextView tvAppName, tvAppFunction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.start_screen_layout);
+/*
+
+        tvAppName = findViewById(R.id.tv_appname);
+        tvAppFunction = findViewById(R.id.tv_app_name);
+
+
+        productSansBold = Typeface.createFromAsset(getAssets(), "fonts/Product-Sans-Bold.ttf");
+        productSansRegular = Typeface.createFromAsset(getAssets(), "fonts/Product-Sans-Regular.ttf");
+
+
+        tvAppName.setTypeface(productSansBold);
+        tvAppFunction.setTypeface(productSansRegular);
+
+*/
 
         skusAndBillingThings = new SkusAndBillingThings(StartActivity.this);
 
@@ -28,12 +47,10 @@ public class StartActivity extends Activity {
         SharedPreferences.Editor editor = billingPrefs.edit();
 
 
-      if( skusAndBillingThings.isAlreadyFullUser()){
+        if (skusAndBillingThings.isAlreadyFullUser()) {
 
-    //if user already purchased full version from before
-          //communicate that they are kawa and dont have to do anything really
-
-
+            //if user already purchased full version from before
+            //communicate that they are kawa and dont have to do anything really
 
 
         }
@@ -48,9 +65,9 @@ public class StartActivity extends Activity {
             Long endTime = timeNow + sevenDays;*/
 
             skusAndBillingThings.setPurchasedAds(false);
-          //  editor.putBoolean("KEY_PURCHASED_UNLOCK", false);
+            //  editor.putBoolean("KEY_PURCHASED_UNLOCK", false);
             skusAndBillingThings.setPremiumPurchased(false);
-         //   skusAndBillingThings.setFreeTrialPeriod(true);
+            //   skusAndBillingThings.setFreeTrialPeriod(true);
 
          /*   editor.putLong("KEY_COUNTER", 0);
 
@@ -129,7 +146,7 @@ public class StartActivity extends Activity {
             startActivity(intent);
             finish();
 
-        } else{
+        } else {
 
             Intent intent = new Intent(StartActivity.this, IntroActivity.class);
             intent.putExtra("zero", 0);

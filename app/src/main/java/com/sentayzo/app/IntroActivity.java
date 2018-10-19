@@ -17,6 +17,12 @@ public class IntroActivity extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        IntroFragment firsttFragment = IntroFragment.newInstance(getString(R.string.money_cr)
+                ,getString(R.string.subtitle)
+                ,R.drawable.ic_wallet_logo
+                , R.color.primary);
+
+
         IntroFragment firstFragment = IntroFragment.newInstance("Peace of mind"
                                                                 ,"Achieve financial peace of mind with Money Cradle"
                                                                 ,R.drawable.svg_finpeace
@@ -40,10 +46,11 @@ public class IntroActivity extends AppIntro {
                 , R.color.blue);
 
 
-        addSlide(firstFragment);
-        addSlide(secondFragment);
-        addSlide(thirdFragment);
-        addSlide(fourthFragment);
+        addSlide(firsttFragment);
+      //  addSlide(secondFragment);
+      //  addSlide(thirdFragment);
+      //  addSlide(fourthFragment);
+        addSlide(new OnboardingGeneral());
 
 /*
         SliderPage sliderPage4 = new SliderPage();

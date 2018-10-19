@@ -6,9 +6,8 @@
 
     <item>
         <bitmap
-
             android:gravity="center"
-            android:src="@drawable/logo_with_words_new"/>
+            android:src="@drawable/ic_wallet_logo_png"/>
     </item>
 
 </layer-list>

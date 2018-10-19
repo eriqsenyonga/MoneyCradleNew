@@ -53,7 +53,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 				// show notification
 				NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
-						context).setSmallIcon(R.drawable.ic_launcher)
+						context).setSmallIcon(R.drawable.ic_notification_money)
+						.setColor(context.getResources().getColor(R.color.primary))
 
 
 				.setContentText(
@@ -118,7 +119,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 				NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
 						context)
-						.setSmallIcon(R.drawable.ic_launcher)
+						.setSmallIcon(R.drawable.ic_notification_money)
+						.setColor(context.getResources().getColor(R.color.primary))
 						.setContentTitle(
 								context.getResources().getString(
 										R.string.enter_transactions))
@@ -226,7 +228,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 			NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(
 					context)
-					.setSmallIcon(R.drawable.ic_launcher)
+					.setSmallIcon(R.drawable.ic_notification_money)
+					.setColor(context.getResources().getColor(R.color.primary))
 					.setContentTitle(
 							context.getResources().getString(
 									R.string.scheduled_transaction))

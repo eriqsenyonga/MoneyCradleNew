@@ -67,6 +67,7 @@ public class SkusAndBillingThings {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
+        builder.setView(v);
         builder.setCancelable(false);
         checkingSubDialog = builder.create();
 

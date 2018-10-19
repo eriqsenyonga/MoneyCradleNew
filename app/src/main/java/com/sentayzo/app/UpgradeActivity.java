@@ -1,5 +1,6 @@
 package com.sentayzo.app;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,10 +57,12 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
     SharedPreferences billingPrefs;
     SharedPreferences.Editor editor;
     SkusAndBillingThings skusAndBillingThings;
+    boolean isAlreadyPremium = false;
     Intent i;
     String SAVE_TO_DB_URL = "http://moneycradle.plexosys-consult.com/saveSubToDb.php";
     String VERIFY_TOKEN_SAVE_TO_DB = "http://moneycradle.plexosys-consult.com/verifyTokenAndSaveToDb.php";
     ApplicationClass applicationClass = ApplicationClass.getInstance();
+    ProgressBar progressBar;
 
 
     @Override
@@ -77,6 +81,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         bYearly = (CardView) findViewById(R.id.b_yearly);
         tvRemoveAds = findViewById(R.id.tv_price_remove_ads);
         cardBlockAds = findViewById(R.id.card_block_ads_only);
+        progressBar = findViewById(R.id.progressbar);
 
         skusAndBillingThings = new SkusAndBillingThings(UpgradeActivity.this);
 
@@ -103,6 +108,10 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
 
         if (skusAndBillingThings.isPremiumUser()) {
 //hide the premium feature that was purchased and also hide block ads only
+
+
+            isAlreadyPremium = true;
+
 
             cardBlockAds.setVisibility(View.GONE);
 
@@ -144,7 +153,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
             public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
                     // The billing client is ready. You can query purchases here.
-                    Toast.makeText(UpgradeActivity.this, "The billing client is ready. You can query purchases here.", Toast.LENGTH_LONG).show();
+                    //  Toast.makeText(UpgradeActivity.this, "The billing client is ready. You can query purchases here.", Toast.LENGTH_LONG).show();
 
                     //   querySkuDetails();
 
@@ -238,33 +247,82 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
 
         if (v == bMonthly) {
             show("Monthly Subscription");
-            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                    .setSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY)
-                    .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
-                    .build();
 
-            int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+
+            if (isAlreadyPremium) {
+//if already premium user and is either upgrading or downgrading
+
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setOldSku(skusAndBillingThings.getWhichSku())
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
+
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+
+            } else {
+//if new purchase
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
+
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+            }
+
+
         }
 
         if (v == bQuarterly) {
-            show("Quarterly Subscription");
-            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                    .setSku(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY)
-                    .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
-                    .build();
 
-            int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+            if (isAlreadyPremium) {
+//if already premium user and is either upgrading or downgrading
+
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setOldSku(skusAndBillingThings.getWhichSku())
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
+
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+
+            } else {
+//if new purchase
+                show("Quarterly Subscription");
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
+
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+            }
         }
 
         if (v == bYearly) {
-            show("Yearly Subscription");
-            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                    .setSku(SkusAndBillingThings.SKU_PREMIUM_YEARLY)
-                    .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
-                    .build();
+
+            if (isAlreadyPremium) {
+//if already premium user and is either upgrading or downgrading
+
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setOldSku(skusAndBillingThings.getWhichSku())
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_YEARLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
+
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+
+            } else {
+//if new purchase
+
+                show("Yearly Subscription");
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setSku(SkusAndBillingThings.SKU_PREMIUM_YEARLY)
+                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                        .build();
 
 
-            int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+                int responseCode = mBillingClient.launchBillingFlow(UpgradeActivity.this, flowParams);
+            }
         }
     }
 
@@ -301,7 +359,7 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
             skusAndBillingThings.setPremiumPurchased(true);
             skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY);
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
-            Log.d("Original Json", purchase.getOriginalJson());
+        //    Log.d("Original Json", purchase.getOriginalJson());
 
 
             //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
@@ -354,60 +412,16 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
 
         if (purchase.getSku().equals(SkusAndBillingThings.SKU_REMOVE_ADS)) {
 
-
             skusAndBillingThings.setPurchasedAds(true);//            purchase.get
-
 
         }
 
     }
 
 
-    private void saveSubscriptionToDb(final String purchaseToken, final String purchaseSku, final String orderId) {
-
-
-        SharedPreferences userSharedPrefs = getSharedPreferences("USER_DETAILS",
-                Context.MODE_PRIVATE);
-
-        final String email = userSharedPrefs.getString("email", "");
-
-        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, SAVE_TO_DB_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Toast.makeText(UpgradeActivity.this, response + " saving to db", Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(UpgradeActivity.this, "Error saving to db", Toast.LENGTH_LONG).show();
-
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("email", email);
-                map.put("purchase_token", purchaseToken);
-                map.put("order_id", orderId);
-                map.put("purchase_sku", purchaseSku);
-
-                return map;
-            }
-        };
-
-
-        applicationClass.add(saveToDbRequest);
-
-    }
-
-
     public void verifyTokenAndSaveToDb(final String purchaseToken, final String purchaseSku) {
 
+        progressBar.setVisibility(View.VISIBLE);
 
         SharedPreferences userSharedPrefs = getSharedPreferences("USER_DETAILS",
                 Context.MODE_PRIVATE);
@@ -419,7 +433,7 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
                     @Override
                     public void onResponse(String response) {
 
-                        Toast.makeText(UpgradeActivity.this, " savED to db", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(UpgradeActivity.this, " savED to db", Toast.LENGTH_LONG).show();
 
 
                         if (response.substring(0, 1).equalsIgnoreCase("{")) {
@@ -431,7 +445,7 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
 
                         } else {
                             Toast.makeText(UpgradeActivity.this, " Something went wrong", Toast.LENGTH_LONG).show();
-
+                            progressBar.setVisibility(View.GONE);
                         }
 
                     }
@@ -439,7 +453,7 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(UpgradeActivity.this, "Error saving to db", Toast.LENGTH_LONG).show();
 
                     }
@@ -499,10 +513,9 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
             skusAndBillingThings.setSubscriptionExpiryDateAndPaymentState(expiryDate, paymentState);
 
             //time in milliseconds: long timeInMillis = System.currentTimeMillis();
-       //     long timeInMillis = System.currentTimeMillis();
-
+            //     long timeInMillis = System.currentTimeMillis();
+            progressBar.setVisibility(View.GONE);
             startActivity(new Intent(UpgradeActivity.this, MainActivity.class));
-
 
 
         } catch (JSONException e) {

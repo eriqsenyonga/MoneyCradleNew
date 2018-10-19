@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 
 public class IntroFragment extends Fragment {
@@ -22,7 +22,7 @@ public class IntroFragment extends Fragment {
 
     View v;
     TextView tvTitle, tvDescription;
-    CircleImageView ivIntroImage;
+    ImageView ivIntroImage;
     LinearLayout linearLayout;
 
     private String title;
@@ -64,7 +64,7 @@ public class IntroFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_intro, container, false);
         tvDescription = (TextView) v.findViewById(R.id.tv_description);
         tvTitle = (TextView) v.findViewById(R.id.tv_title);
-        ivIntroImage = (CircleImageView) v.findViewById(R.id.iv_intro_image);
+        ivIntroImage = v.findViewById(R.id.iv_intro_image);
         linearLayout = (LinearLayout) v.findViewById(R.id.linlay_intro);
 
         return v;
