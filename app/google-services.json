@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "283458191510",
+    "firebase_url": "https://moneycradlenew.firebaseio.com",
+    "project_id": "moneycradlenew",
+    "storage_bucket": "moneycradlenew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283458191510:android:653efadff4cc0831",
+        "android_client_info": {
+          "package_name": "com.sentayzo.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283458191510-u4qd4ou7tf6812p7ddue512jvlnko42j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sentayzo.app",
+            "certificate_hash": "f604ac21771eeb0d71169cc89cb0f8a53cbcf3a5"
+          }
+        },
+        {
+          "client_id": "283458191510-jt0sl2s1ukjipffkkqao33bgodl8da24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWpw6hJQ_TgZFn0jxVu1XqWghFQbAFsdQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283458191510-jt0sl2s1ukjipffkkqao33bgodl8da24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
