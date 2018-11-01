@@ -22,6 +22,7 @@ public class IntroActivity extends AppIntro {
                 ,R.drawable.ic_wallet_logo
                 , R.color.primary);
 
+/*
 
         IntroFragment firstFragment = IntroFragment.newInstance("Peace of mind"
                                                                 ,"Achieve financial peace of mind with Money Cradle"
@@ -44,6 +45,7 @@ public class IntroActivity extends AppIntro {
                 ,"Improve your financial intelligence with Money Cradle Success Academy"
                 ,R.drawable.svg_finintel
                 , R.color.blue);
+*/
 
 
         addSlide(firsttFragment);

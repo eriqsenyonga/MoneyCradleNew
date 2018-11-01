@@ -22,5 +22,6 @@
 
 -keepattributes Signature
 -keepattributes *Annotation*
+-keep @**annotation** class * {*;}
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses

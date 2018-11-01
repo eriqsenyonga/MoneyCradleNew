@@ -46,6 +46,7 @@ public class SkusAndBillingThings {
     public static String KEY_PAYMENT_STATE = "KEY_PAYMENT_STATE";
     public static String KEY_HAS_ACCESS = "KEY_HAS_ACCESS";
     String VERIFY_TOKEN_SAVE_TO_DB = "http://moneycradle.plexosys-consult.com/verifyTokenAndSaveToDb.php";
+    String CHECK_IF_EMAIL_IS_PREMIUM = "http://moneycradle.plexosys-consult.com/checkIfUserPremiumByEmail.php";
     ApplicationClass applicationClass = ApplicationClass.getInstance();
     public static String KEY_BILLING_PREFS = "my_billing_prefs";
 
@@ -53,7 +54,7 @@ public class SkusAndBillingThings {
 
     Context context;
 
-    SharedPreferences billingPrefs;
+    SharedPreferences billingPrefs, userSharedPrefs;
     SharedPreferences.Editor editor;
     Dialog checkingSubDialog;
 
@@ -63,6 +64,9 @@ public class SkusAndBillingThings {
         context = c;
         billingPrefs = context.getSharedPreferences(KEY_BILLING_PREFS, MODE_PRIVATE);
         editor = billingPrefs.edit();
+
+        userSharedPrefs = context.getSharedPreferences("USER_DETAILS",
+                Context.MODE_PRIVATE);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -312,23 +316,28 @@ public class SkusAndBillingThings {
     public void checkSubValidityByExpiryDate() {
 
 
-        long expiryDate = billingPrefs.getLong(KEY_SUBSCRIPTION_EXPIRY_DATE, 0);
+        if (isAlreadyFullUser()) {
 
-        if (expiryDate > System.currentTimeMillis()) {
-
-            //if expiry in future
             setHasAccess(true);
 
         } else {
+            long expiryDate = billingPrefs.getLong(KEY_SUBSCRIPTION_EXPIRY_DATE, 0);
 
-            //if the expiry date is in the past, then the user hasnt paid for something yet or it has just not been updated yet
-            //so check online to verify the actual current status
+            if (expiryDate > System.currentTimeMillis()) {
 
-            checkOnlineForUpdatedCurrentStatus();
+                //if expiry in future
+                setHasAccess(true);
+
+            } else {
+
+                //if the expiry date is in the past, then the user hasnt paid for something yet or it has just not been updated yet
+                //so check online to verify the actual current status
+
+                checkOnlineForUpdatedCurrentStatus();
 
 
+            }
         }
-
 
     }
 
@@ -336,7 +345,7 @@ public class SkusAndBillingThings {
 
         checkingSubDialog.show();
 
-        SharedPreferences userSharedPrefs = context.getSharedPreferences("USER_DETAILS",
+        userSharedPrefs = context.getSharedPreferences("USER_DETAILS",
                 Context.MODE_PRIVATE);
 
         final String email = userSharedPrefs.getString("email", "");
@@ -371,12 +380,21 @@ public class SkusAndBillingThings {
                     public void onErrorResponse(VolleyError error) {
 
                         if (error instanceof NoConnectionError) {
+                            checkingSubDialog.cancel();
 
                             setHasAccess(false);
                             Toast.makeText(context, "Error: No internet connection ", Toast.LENGTH_LONG).show();
 
+                        } else if (error instanceof TimeoutError) {
+                            checkingSubDialog.cancel();
+
+                            setHasAccess(false);
+                            Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_LONG).show();
+
+
                         } else {
 
+                            checkingSubDialog.cancel();
 
                             setHasAccess(false);
                             Toast.makeText(context, "Error checking subscription status", Toast.LENGTH_LONG).show();
@@ -434,6 +452,7 @@ public class SkusAndBillingThings {
             JSONObject purchaseObject = new JSONObject(response);
 
             long expiryDate = purchaseObject.getLong("expiryTimeMillis");
+            setSubscriptionExpiryDate(expiryDate);
 
             if (purchaseObject.isNull("paymentState")) {
 
@@ -501,5 +520,120 @@ public class SkusAndBillingThings {
         editor.putLong(KEY_SUBSCRIPTION_EXPIRY_DATE, expiryDate).apply();
         // editor.putInt(KEY_PAYMENT_STATE, paymentState).apply();
         setHasAccess(expiryDate);
+    }
+
+    public void setAllToDefault() {
+        editor.putLong(KEY_SUBSCRIPTION_EXPIRY_DATE, 0).apply();
+        editor.putString(KEY_WHICH_SUBSCRIPTION_SKU, "").apply();
+        setPremiumPurchased(false);
+        setPurchasedAds(false);
+        editor.putString(KEY_PURCHASE_TOKEN, "").apply();
+
+    }
+
+
+    public void checkIfUserIsPremium() {
+
+        checkingSubDialog.show();
+
+        final String email = userSharedPrefs.getString("email", "");
+
+        StringRequest checkServerForEmailRequest = new StringRequest(Request.Method.POST, CHECK_IF_EMAIL_IS_PREMIUM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        //     Toast.makeText(UpgradeActivity.this, " savED to db", Toast.LENGTH_LONG).show();
+
+                        handleDatabaseResponseFromServer(response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if (error instanceof NoConnectionError) {
+
+                            setHasAccess(false);
+                            checkingSubDialog.cancel();
+                            Toast.makeText(context, "Error: No internet connection ", Toast.LENGTH_LONG).show();
+
+                        } else if (error instanceof TimeoutError) {
+                            checkingSubDialog.cancel();
+
+                            setHasAccess(false);
+                            Toast.makeText(context, "Please check your internet connection", Toast.LENGTH_LONG).show();
+
+
+                        } else {
+
+                            checkingSubDialog.cancel();
+                            setHasAccess(false);
+                            Toast.makeText(context, "Error checking subscription status", Toast.LENGTH_LONG).show();
+                        }
+
+                        checkingSubDialog.cancel();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("email", email);
+
+                return map;
+            }
+        };
+
+        applicationClass.add(checkServerForEmailRequest);
+
+    }
+
+    private void handleDatabaseResponseFromServer(String response) {
+
+/*
+IF USER EXISTS RESPONSE
+        {
+            "exists": true,
+                "user": {
+            "purchase_token": "aajcmclmiblipgimkkmmaane.AO-J1OwZX4ofCVajh_kezCwCDIz7OBwGEOTUJeLoG2tKlLrkY9OaRNson7laA1c7e73bkj0z7X0lTEEqrqtR9yvmg703Hw5Cm46PYfVEtwRGVlx4g77cO9TuTqMZycvQHrq9xxuhS7m_",
+                    "purchase_sku": "sku_premium_monthly",
+                    "expiry_time": "1539956924710",
+                    "current_status": "cancelled"
+        }
+        }
+
+IF USER DOESN'T EXIST RESPONSE
+        {
+            "exists": false
+        }
+        */
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+
+            if (jsonObject.getBoolean("exists")) {
+                //if the user exists in the db then add the purchase_token and purchase_sku to the local
+
+                setPremiumPurchaseToken(jsonObject.getString("purchase_token"));
+                setWhichSku(jsonObject.getString("purchase_sku"));
+                setSubscriptionExpiryDate(jsonObject.getLong("expiry_time"));
+
+                checkOnlineForUpdatedCurrentStatus();
+
+
+            } else {
+
+                checkingSubDialog.cancel();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            checkingSubDialog.cancel();
+
+        }
+
+
     }
 }

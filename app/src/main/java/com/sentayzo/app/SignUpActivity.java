@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -35,11 +36,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     RelativeLayout loadingPanel;
     SharedPreferences userSharedPrefs;
     SharedPreferences.Editor editor;
+    AlertDialog connectingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+        View v = LayoutInflater.from(SignUpActivity.this).inflate(R.layout.dialog_connecting, null);
+        builder.setView(v);
+        builder.setCancelable(false);
+        connectingDialog = builder.create();
 
         firebaseAuth = FirebaseAuth.getInstance();
         userSharedPrefs = getSharedPreferences("USER_DETAILS",
@@ -152,6 +160,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void goToMainActivity() {
         Intent i = new Intent(SignUpActivity.this, MainActivity.class);
         i.putExtra("zero", 0);
+        i.putExtra("new_login", 1);
         startActivity(i);
         finish();
     }
@@ -168,7 +177,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         bSignUp.setActivated(false);
         bSignUp.setText(R.string.wait);
-        loadingPanel.setVisibility(View.VISIBLE);
+      //  loadingPanel.setVisibility(View.VISIBLE);
+        connectingDialog.show();
 
     }
 
@@ -176,7 +186,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         bSignUp.setActivated(true);
         bSignUp.setText(R.string.sign_up);
-        loadingPanel.setVisibility(View.GONE);
+     //   loadingPanel.setVisibility(View.GONE);
+        connectingDialog.cancel();
 
     }
 

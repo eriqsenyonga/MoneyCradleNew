@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
 
     <string name="ga_appName">MONEY_CRADLE</string>
-    <string name="ga_appVersion">1.4.0</string>
+    <string name="ga_appVersion">2.0.0</string>
    
     <!-- Remember to disable verobse log level for production -->
     <string name="ga_logLevel">verbose</string>

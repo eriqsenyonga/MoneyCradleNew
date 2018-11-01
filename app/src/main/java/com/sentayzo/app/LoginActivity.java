@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -72,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     GoogleSignInClient googleSignInClient;
     CallbackManager callbackManager;
 
+    AlertDialog connectingDialog;
+
     String TAG = "LoginActivity";
 
     SignInButton bGoogleLogin;
@@ -83,6 +86,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        View v = LayoutInflater.from(LoginActivity.this).inflate(R.layout.dialog_connecting, null);
+        builder.setView(v);
+        builder.setCancelable(false);
+        connectingDialog = builder.create();
 
         //FirebaseApp.initializeApp(this);
         mAuth = applicationClass.getFirebaseAuth();
@@ -268,12 +276,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //  Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             saveUserDetailsInSharedPrefs(user.getEmail(), user.getDisplayName());
-
-                            checkOnlineIfUserIsPremium(user.getEmail());
+                            goToMainActivity();
+                            //  checkOnlineIfUserIsPremium(user.getEmail());
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            //    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //  hideLoadingPanel();
@@ -285,89 +293,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    private void checkOnlineIfUserIsPremium(final String email) {
-
-        StringRequest saveToDbRequest = new StringRequest(Request.Method.POST, CHECK_IF_PREMIUM_USER,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        if (response.equalsIgnoreCase("not exist")) {
-
-                            goToMainActivity();
-
-                        } else {
-
-                            getTheSubscriptionDetails(email, response);
-
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        if (error instanceof NoConnectionError) {
-
-
-                            Toast.makeText(LoginActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-
-                        } else {
-
-                            Toast.makeText(LoginActivity.this, R.string.something_went_wr, Toast.LENGTH_LONG).show();
-                        }
-
-
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("email", email);
-
-
-                return map;
-            }
-        };
-
-        applicationClass.add(saveToDbRequest);
-
-
-    }
-
-    private void getTheSubscriptionDetails(final String email, String jsonResponse) {
-
-/*
-Sample jsonResponse
-        {
-            "purchase_token": "fikjchconfbppmihiobobonf.AO-J1OymYHAmGlpOECNnT7QDVR_0TI2J8ct7xsjjkMHs57cwoI1zENwBxXchZ3tkaJ_7ic-B3Wdus8b3y8bQM7tbSXCWA_dAMi5olouM2f8oMcWRGWx8zxTg3AZRtLpDrgnGlOM4fqIy",
-                "purchase_sku": "sku_premium_monthly",
-                "expiry_time": "1539110398515"
-        }
-*/
-
-        SkusAndBillingThings skusAndBillingThings = new SkusAndBillingThings(LoginActivity.this);
-
-
-        try {
-            JSONObject details = new JSONObject(jsonResponse);
-
-            skusAndBillingThings.setPremiumPurchased(true);
-            skusAndBillingThings.setPremiumPurchaseToken(details.getString("purchase_token"));
-            skusAndBillingThings.setSubscriptionExpiryDate(details.getLong("expiry_time"));
-            skusAndBillingThings.setWhichSku(details.getString("purchase_sku"));
-         //   skusAndBillingThings.checkSubValidityByExpiryDate();
-            hideLoadingPanel();
-            goToMainActivity();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     private void signInUser(String email, String password) {
 
@@ -381,7 +306,8 @@ Sample jsonResponse
                             //   Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             saveUserDetailsInSharedPrefs(user.getEmail(), user.getDisplayName());
-                            checkOnlineIfUserIsPremium(user.getEmail());
+                            // checkOnlineIfUserIsPremium(user.getEmail());
+                            goToMainActivity();
 
 
                         } else {
@@ -483,15 +409,16 @@ Sample jsonResponse
 
         bLogin.setActivated(false);
         bLogin.setText(R.string.wait);
-        loadingPanel.setVisibility(View.VISIBLE);
-
+        // loadingPanel.setVisibility(View.VISIBLE);
+        connectingDialog.show();
     }
 
     private void hideLoadingPanel() {
 
         bLogin.setActivated(true);
         bLogin.setText(R.string.login);
-        loadingPanel.setVisibility(View.GONE);
+        //  loadingPanel.setVisibility(View.GONE);
+        connectingDialog.cancel();
 
     }
 
@@ -525,6 +452,7 @@ Sample jsonResponse
     private void goToMainActivity() {
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         i.putExtra("zero", 0);
+        i.putExtra("new_login", 1);
         startActivity(i);
         finish();
     }

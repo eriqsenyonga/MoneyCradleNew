@@ -8,9 +8,8 @@
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- The screen names that will appear in reports -->
-    <screenName name="com.sentayzo.app.ReportsViewActivity">ReportsViewActivity
-    </screenName>
-    <screenName name="com.sentayzo.app.StoreActivity">StoreActivity
+
+    <screenName name="com.sentayzo.app.UpgradeActivity">UpgradeActivity
     </screenName>
     <screenName name="com.sentayzo.app.ScheduledFragment">ScheduledFragment
     </screenName>
@@ -28,7 +27,12 @@
     </screenName>
     <screenName name="com.sentayzo.app.EditTransaction">EditTransaction
     </screenName>
-
+    <screenName name="com.sentayzo.app.StatisticsActivity">StatisticsActivity
+    </screenName>
+    <screenName name="com.sentayzo.app.StatisticsFragment">StatisticsFragment
+    </screenName>
+    <screenName name="com.sentayzo.app.SuccessAcademyFragment">SuccessAcademy
+    </screenName>
     <screenName name="com.sentayzo.app.EditTransfer">EditTransfer
     </screenName>
     <screenName name="com.sentayzo.app.EditScheduledTx">EditScheduledTx
@@ -39,7 +43,7 @@
     </screenName>
     <screenName name="com.sentayzo.app.ClosedAccountsListFragment">ClosedAccountsListFragment
     </screenName>
-    <screenName name="com.sentayzo.app.ViewAccountHistory">ViewAccountHistory
+    <screenName name="com.sentayzo.app.OverviewActivity">OverviewActivity
     </screenName>
     <screenName name="com.sentayzo.app.PayeeList">PayeeList
     </screenName>
@@ -53,7 +57,9 @@
     </screenName>
     <screenName name="com.sentayzo.app.FinancialStatement">FinancialStatement
     </screenName>
-    <screenName name="com.sentayzo.app.PinActivity">LoginActivity</screenName>
+    <screenName name="com.sentayzo.app.PinActivity">PINActivity</screenName>
+    <screenName name="com.sentayzo.app.LoginActivity">LoginActivity</screenName>
+    <screenName name="com.sentayzo.app.SignUpActivity">SignUpActivity</screenName>
 
 
     <!-- The following value should be replaced with correct property id. -->

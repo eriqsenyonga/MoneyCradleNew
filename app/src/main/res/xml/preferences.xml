@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-     
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_localeInfo_title" >
+
+    <PreferenceCategory android:title="@string/pref_localeInfo_title">
         <ListPreference
             android:defaultValue="US"
             android:entries="@array/country_name"
@@ -26,10 +25,22 @@
             android:dependency="pref_use_custom_currency"
             android:key="pref_create_custom_currency"
             android:shouldDisableView="true"
-            android:title="@string/create_custom_currency" 
-            android:summary=" "/>
+            android:summary=" "
+            android:title="@string/create_custom_currency" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_privacy_title" >
+
+    <PreferenceCategory android:title="@string/subscription_settings">
+
+        <Preference android:title="My Subscriptions">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/account/subscriptions" />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/pref_privacy_title">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_PIN_authorisation"
@@ -45,7 +56,7 @@
             android:shouldDisableView="true"
             android:title="@string/pref_enter_PIN" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_general_settings_title" >
+    <PreferenceCategory android:title="@string/pref_general_settings_title">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_daily_reminder"

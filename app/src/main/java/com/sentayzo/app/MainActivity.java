@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,16 +60,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton fabNewTransfer;
     FloatingActionButton fab;
     Button bGetPremium;
-    int count = 1;
+    int count = 0;
     SharedPreferences userSharedPrefs;
     SkusAndBillingThings skusAndBillingThings;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-      skusAndBillingThings = new SkusAndBillingThings(MainActivity.this);
+        skusAndBillingThings = new SkusAndBillingThings(MainActivity.this);
 
 
         userSharedPrefs = getSharedPreferences("USER_DETAILS",
@@ -175,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else if (menuItemId == R.id.navigation_item_make_a_suggestion) {
                     // if "send feedback is clicked"
-                    sendFeedbackEmail();
+                    // sendFeedbackEmail();
+                    fragment = new AboutFragment();
 
                 } else if (menuItemId == R.id.navigation_item_tell_a_friend) {
                     // if "tell a friend is clicked"
@@ -304,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        AppRater.app_launched(this);
 
 
-        Intent i = getIntent();
+        i = getIntent();
 
         if (i.hasExtra("zero")) {
 
@@ -438,6 +441,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
         notificationsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -508,12 +512,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if (id == R.id.action_Help) {
-       /*     Intent i = new Intent(this, HelpActivityNew.class);
-            startActivity(i);
-*/
-            Intent i = new Intent(this, TestOut.class);
+            Intent i = new Intent(this, HelpActivityNew.class);
             startActivity(i);
 
+          /*  Intent i = new Intent(this, TestOut.class);
+            startActivity(i);
+*/
         }
 
 
@@ -648,7 +652,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        if(skusAndBillingThings.isPremiumUser()){
+
+        if (i.hasExtra("new_login")) {
+//if it is a brand new login
+
+            skusAndBillingThings.setAllToDefault();
+            skusAndBillingThings.checkIfUserIsPremium();
+
+        } else if (skusAndBillingThings.isPremiumUser()) {
 
             skusAndBillingThings.checkSubValidityByExpiryDate();
 

@@ -1,6 +1,7 @@
 package com.sentayzo.app;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 
 import com.android.volley.Request;
@@ -13,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
 
-public class ApplicationClass extends Application {
+public class ApplicationClass extends MultiDexApplication {
  
 	// The following line should be changed to include the correct property id.
 

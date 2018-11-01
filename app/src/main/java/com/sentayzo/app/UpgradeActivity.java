@@ -41,6 +41,8 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.sentayzo.app.SkusAndBillingThings;
 
 import org.json.JSONException;
@@ -63,12 +65,19 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
     String VERIFY_TOKEN_SAVE_TO_DB = "http://moneycradle.plexosys-consult.com/verifyTokenAndSaveToDb.php";
     ApplicationClass applicationClass = ApplicationClass.getInstance();
     ProgressBar progressBar;
+    Tracker t;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_upgrade);
+
+        t = ((ApplicationClass) getApplication())
+                .getTracker(ApplicationClass.TrackerName.APP_TRACKER);
+
+        t.setScreenName("UpgradeActivity");
+        t.send(new HitBuilders.ScreenViewBuilder().build());
 
 
         i = getIntent();
@@ -234,7 +243,10 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == bRemoveAds) {
-            show("Remove Ads");
+        //    show("Remove Ads");
+            t.send(new HitBuilders.EventBuilder().setCategory("Button")
+                    .setAction("Click").setLabel("Remove Ads clicked").build());
+
             BillingFlowParams flowParams = BillingFlowParams.newBuilder()
                     .setSku(SkusAndBillingThings.SKU_REMOVE_ADS)
                     .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
@@ -246,7 +258,10 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if (v == bMonthly) {
-            show("Monthly Subscription");
+
+            t.send(new HitBuilders.EventBuilder().setCategory("Button")
+                    .setAction("Click").setLabel("monthly clicked").build());
+          //  show("Monthly Subscription");
 
 
             if (isAlreadyPremium) {
@@ -274,7 +289,8 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if (v == bQuarterly) {
-
+            t.send(new HitBuilders.EventBuilder().setCategory("Button")
+                    .setAction("Click").setLabel("quarterly clicked").build());
             if (isAlreadyPremium) {
 //if already premium user and is either upgrading or downgrading
 
@@ -299,6 +315,9 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         if (v == bYearly) {
+
+            t.send(new HitBuilders.EventBuilder().setCategory("Button")
+                    .setAction("Click").setLabel("yearly clicked").build());
 
             if (isAlreadyPremium) {
 //if already premium user and is either upgrading or downgrading
@@ -359,6 +378,11 @@ public class UpgradeActivity extends AppCompatActivity implements View.OnClickLi
             skusAndBillingThings.setPremiumPurchased(true);
             skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_MONTHLY);
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
+
+            t.send(new HitBuilders.EventBuilder().setCategory("Subscription")
+                    .setAction("Finished").setLabel("Monthly Subscription")
+                    .build());
+
         //    Log.d("Original Json", purchase.getOriginalJson());
 
 
@@ -390,7 +414,9 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
             skusAndBillingThings.setWhichSku(SkusAndBillingThings.SKU_PREMIUM_QUARTERLY);
 
-
+            t.send(new HitBuilders.EventBuilder().setCategory("Subscription")
+                    .setAction("Finished").setLabel("Quarterly")
+                    .build());
             //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
             verifyTokenAndSaveToDb(purchase.getPurchaseToken(), purchase.getSku());
 
@@ -404,6 +430,10 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
 
             skusAndBillingThings.setPremiumPurchaseToken(purchase.getPurchaseToken());
 
+            t.send(new HitBuilders.EventBuilder().setCategory("Subscription")
+                    .setAction("Finished").setLabel("Yearly Subscription")
+                    .build());
+
             //  saveSubscriptionToDb(purchase.getPurchaseToken(), purchase.getSku(), purchase.getOrderId());
             verifyTokenAndSaveToDb(purchase.getPurchaseToken(), purchase.getSku());
 
@@ -413,7 +443,9 @@ THIS IS THE FORMAT OF THE ORGINAL JSON
         if (purchase.getSku().equals(SkusAndBillingThings.SKU_REMOVE_ADS)) {
 
             skusAndBillingThings.setPurchasedAds(true);//            purchase.get
-
+            t.send(new HitBuilders.EventBuilder().setCategory("Purchase")
+                    .setAction("Finished").setLabel("Remove Ads")
+                    .build());
         }
 
     }
