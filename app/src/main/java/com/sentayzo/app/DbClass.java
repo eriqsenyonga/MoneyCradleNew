@@ -1444,6 +1444,8 @@ public class DbClass {
             idColumn = KEY_PROJECT_ID;
         }
 
+        open();
+
         String sql = "SELECT " + nameColumn + " FROM "
                 + table + " WHERE " + idColumn + "=" + idOfEntity;
 
@@ -1453,6 +1455,7 @@ public class DbClass {
 
         String title = c.getString(c.getColumnIndex(nameColumn));
         c.close();
+        close();
         return title;
 
     }
@@ -2708,14 +2711,14 @@ public class DbClass {
 
         Cursor c = ourDatabase.rawQuery(sql3, null);
 
-        Log.d("col_index catExpTot", "" + c.getColumnIndex(catExpenseTotal));
+      /*  Log.d("col_index catExpTot", "" + c.getColumnIndex(catExpenseTotal));
         Log.d("col_index catIncTot", "" + c.getColumnIndex(catIncomeTotal));
 
         Log.d("col_index catName",
                 ""
                         + c.getColumnIndex(DATABASE_TABLE_CATEGORY + "."
                         + KEY_CATEGORY_NAME));
-
+*/
         if (c.getCount() > 0) {
 
             String catName;
@@ -3096,11 +3099,11 @@ public class DbClass {
         if (c.getCount() > 0) {
 
             int totalNumberOfRows = c.getCount();
-            Log.d("totNumberOfRows", "" + totalNumberOfRows);
+        //    Log.d("totNumberOfRows", "" + totalNumberOfRows);
 
             Bundle bundle[] = new Bundle[totalNumberOfRows];
 
-            Log.d("bundle", "" + bundle);
+        //    Log.d("bundle", "" + bundle);
             int counter;
             String startDate, nextDate;
             Long recurId;
@@ -3111,39 +3114,39 @@ public class DbClass {
                 startDate = c.getString(c
                         .getColumnIndex(KEY_SCHEDULED_START_DATE));
 
-                Log.d("startDate", startDate);
+              //  Log.d("startDate", startDate);
 
                 nextDate = c.getString(c
                         .getColumnIndex(KEY_SCHEDULED_NEXT_DATE));
 
-                Log.d("nextDate", nextDate);
+               // Log.d("nextDate", nextDate);
                 recurId = c.getLong(c
                         .getColumnIndex(KEY_SCHEDULED_SCH_RECURRENCE_ID));
 
-                Log.d("recurId", "" + recurId);
+               // Log.d("recurId", "" + recurId);
                 alarmId = c.getInt(c.getColumnIndex(KEY_SCHEDULED_ALARM_ID));
 
-                Log.d("alarmId", "" + alarmId);
+              /*  Log.d("alarmId", "" + alarmId);
 
-                Log.d("inGETALLpENDING", "" + counter);
+                Log.d("inGETALLpENDING", "" + counter);*/
 
                 bundle[counter] = new Bundle();
 
-                Log.d("bundle[" + counter + "]", "" + bundle[counter]);
+             //   Log.d("bundle[" + counter + "]", "" + bundle[counter]);
 
                 bundle[counter].putString("nextDate", nextDate);
                 bundle[counter].putLong("recurId", recurId);
                 bundle[counter].putInt("alarmId", alarmId);
                 bundle[counter].putString("startDate", startDate);
 
-                Log.e("after puts", "***************************************");
+             /*  // Log.e("after puts", "***************************************");
 
                 Log.d("nextDate", bundle[counter].getString("nextDate"));
                 Log.d("startDate", bundle[counter].getString("startDate"));
 
                 Log.d("recurId", "" + bundle[counter].getLong("recurId"));
 
-                Log.d("alarmId", "" + bundle[counter].getInt("alarmId"));
+                Log.d("alarmId", "" + bundle[counter].getInt("alarmId"));*/
 
             }
 
